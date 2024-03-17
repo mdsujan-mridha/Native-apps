@@ -7,6 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Profile from '../Screen/Profile';
 import Messages from '../Screen/Messages';
 import { colors } from '../utils/styles';
+import Properties from '../Screen/Properties';
 
 const Drawer = createDrawerNavigator();
 
@@ -46,8 +47,17 @@ const AppStack = () => {
                     drawerIcon: ({ color }) => (
                         <Ionicons name="chatbox-ellipses-outline" size={22} color={color} />
                     ),
+                    headerShown: false,
                 }}
             />
+            <Drawer.Screen name='Properties' component={Properties}
+
+                options={{
+                    drawerIcon: ({ color }) => (
+                        <Ionicons name="list-outline" size={22} color={color} />
+                    ),
+                    headerShown: false,
+                }} />
         </Drawer.Navigator>
     )
 }

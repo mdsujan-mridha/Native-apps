@@ -1,4 +1,4 @@
-import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image,StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import AppHeader from '../components/AppHeader'
 import Entypo from 'react-native-vector-icons/Entypo'

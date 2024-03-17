@@ -12,6 +12,8 @@ import AppStack from './Navigation/AppStack';
 // import AuthStack from './Navigation/AuthStack';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from './Screen/Login';
+import Footer from './components/Footer';
+
 
 
 const Stack = createNativeStackNavigator();
@@ -23,7 +25,9 @@ function App(): React.JSX.Element {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="App" component={AppStack} options={{ headerShown: false }} />
         <Stack.Screen name='Login' component={Login} />
+        
       </Stack.Navigator>
+      <Footer />
     </NavigationContainer>
   );
 }
