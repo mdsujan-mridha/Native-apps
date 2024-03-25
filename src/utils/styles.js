@@ -10,5 +10,16 @@ export const colors = {
     color8: "#f9ba06",
 }
 
+export const defaultStyle = ({
+    inputStyle: {
+        height: 50,
+        borderRadius: 7,
+        borderBottomWidth: 1,
+        borderBottomColor: colors.color3,
+        padding: 15,
+        color: colors.color3,
+    }
+})
+
 export const defaultImg =
     "https://p.kindpng.com/picc/s/451-4517876_default-profile-hd-png-download.png";

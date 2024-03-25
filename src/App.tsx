@@ -13,6 +13,8 @@ import AppStack from './Navigation/AppStack';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from './Screen/Login';
 import Footer from './components/Footer';
+import ToastManager from 'toastify-react-native';
+import Register from './Screen/Register';
 
 
 
@@ -22,11 +24,13 @@ function App(): React.JSX.Element {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Login'>
         <Stack.Screen name="App" component={AppStack} options={{ headerShown: false }} />
         <Stack.Screen name='Login' component={Login} />
-        
+        <Stack.Screen name='Register' component={Register} options={{ headerShown: false }} />
       </Stack.Navigator>
+      <ToastManager />
       <Footer />
     </NavigationContainer>
   );

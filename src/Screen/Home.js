@@ -110,11 +110,11 @@ export default Home;
 const styles = StyleSheet.create({
     txt: {
         color: colors.color1,
-        fontSize: 16,
+        fontSize: 11,
         fontWeight: "bold",
     },
     categoryTitle: {
-        fontSize: 14,
+        fontSize: 10,
         fontWeight: "bold",
         color: colors.color3,
     },

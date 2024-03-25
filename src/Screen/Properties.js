@@ -1,6 +1,5 @@
 
-
-import { Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useState } from 'react'
 import AppHeader from '../components/AppHeader'
 import { colors } from '../utils/styles'
@@ -19,9 +18,7 @@ const categories = [
 ]
 
 const Properties = ({ navigation }) => {
-
     const [category, setCategory] = useState("");
-
     return (
         <>
             <AppHeader
@@ -36,7 +33,6 @@ const Properties = ({ navigation }) => {
                 navigation={navigation}
                 optionalFunction={() => console.log("optionalBtnPress")}
             />
-
             <View>
                 <View style={{ backgroundColor: colors.color1, height: 70, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     <TextInput
@@ -64,7 +60,6 @@ const Properties = ({ navigation }) => {
                         }}
                         showsHorizontalScrollIndicator={false}
                     >
-
                         {
                             categories &&
                             categories?.map((item, index) => (
@@ -75,14 +70,12 @@ const Properties = ({ navigation }) => {
                                         borderRadius: 100,
                                         margin: 5,
                                         height: 40,
-
                                     }}
                                     onPress={() => setCategory(item)}
                                 >
-                                    <Text> {item} </Text>
+                                    <Text style={styles.txt}> {item} </Text>
                                 </Button>
                             ))
-
                         }
                         <Button
                             style={{
@@ -92,7 +85,7 @@ const Properties = ({ navigation }) => {
                                 height: 40,
                             }}
                         >
-                            <Text> Clear All </Text>
+                            <Text style={styles.txt}> Clear All </Text>
                         </Button>
 
                     </ScrollView>
@@ -109,7 +102,7 @@ const Properties = ({ navigation }) => {
                         showsHorizontalScrollIndicator={false}
                     >
 
-                        <Text style={{ ...styles.txt, paddingLeft: 10 }}> সর্বোচ্চ টাকা: </Text>
+                        <Text style={styles.txt}> সর্বোচ্চ টাকা: </Text>
                         <TextInput
                             placeholder='50000'
                             style={styles.input}
@@ -135,51 +128,50 @@ const Properties = ({ navigation }) => {
                             <Text> Clear All </Text>
                         </Button>
                     </ScrollView>
-
                 </View>
             </View>
-            <ScrollView contentContainerStyle={{ display: "flex", justifyContent: "center", alignItems: "center",gap:15 }} showsVerticalScrollIndicator={false}>
+            <ScrollView contentContainerStyle={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 15 }} showsVerticalScrollIndicator={false}>
                 {
                     demoData &&
                     demoData.map((item) => (
-                        <View key={item?._id} style={{backgroundColor:colors.color3,borderRadius:5}}>
-                            <Image source={item?.img} style={{marginTop:5}}/>
-                            <View style={{marginTop:5}}>
-                                <Text style={{ color: colors.color1, fontWeight: 'bold', fontSize: 16 }}> {item?.title} </Text>
-                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: "space-between", paddingHorizontal: 20, paddingVertical: 10 }}>
+                        <View key={item?._id} style={{ backgroundColor: colors.color3, borderRadius: 5, display: 'flex', justifyContent: "center", alignItems: 'center', width: '100%' }}>
+                            <View>
+                                <Image source={item?.img} style={styles.img} />
+                            </View>
+                            <View style={{ marginTop: 5, width: '100%' }}>
+                                <Text style={styles.title}> {item?.title} </Text>
+                                <View style={{...styles.content,justifyContent: "space-between", paddingHorizontal: 5, paddingVertical: 10 }}>
                                     <View style={{ display: 'flex', width: "50%" }}>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                            <IonIcon name="bed-outline" size={25} color={colors.color1} />
-                                            <Text style={{ color: colors.color1, fontWeight: 'bold', fontSize: 16 }}> {item?.bedRoom} </Text>
+                                        <View style={styles.content}>
+                                            <IonIcon name="bed-outline" size={20} color={colors.color1} />
+                                            <Text style={styles.textUtils}> {item?.bedRoom} </Text>
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                            <IonIcon name="file-tray-outline" size={25} color={colors.color1} />
-                                            <Text style={{ color: colors.color1, fontWeight: 'bold', fontSize: 16 }}> {item?.washRoom} </Text>
+                                        <View style={styles.content}>
+                                            <IonIcon name="file-tray-outline" size={20} color={colors.color1} />
+                                            <Text style={styles.textUtils}> {item?.washRoom} </Text>
                                         </View>
                                     </View>
                                     <View style={{ display: 'flex', width: "30%" }}>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                            <IonIcon name="checkmark-circle-outline" size={25} color={colors.color1} />
-                                            <Text style={{ color: colors.color1, fontWeight: 'bold', fontSize: 16 }}> {item?.diningRoom} </Text>
+                                        <View style={styles.content}>
+                                            <IonIcon name="checkmark-circle-outline" size={20} color={colors.color1} />
+                                            <Text style={styles.textUtils}> {item?.diningRoom} </Text>
                                         </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                            <IonIcon name="checkmark-circle-outline" size={25} color={colors.color1} />
-                                            <Text style={{ color: colors.color1, fontWeight: 'bold', fontSize: 16 }}> {item?.balcony} </Text>
+                                        <View style={styles.content}>
+                                            <IonIcon name="checkmark-circle-outline" size={20} color={colors.color1} />
+                                            <Text style={styles.textUtils}> {item?.balcony} </Text>
                                         </View>
                                     </View>
                                 </View>
-                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center',paddingVertical: 10,gap:5 }}>
-                                    <IonIcon name="location-outline" size={25} color={colors.color1} />
-                                    <Text style={{ color: colors.color1, fontWeight: 'bold', fontSize: 16 }}> {item?.location} </Text>
-                                    <Text style={{ color:colors.color1,fontWeight:"bold",fontSize:16 }}> ভাড়া:$ {item?.price}  </Text>
+                                <View style={{...styles.content, paddingVertical: 10, gap: 5 }}>
+                                    <IonIcon name="location-outline" size={20} color={colors.color1} />
+                                    <Text style={styles.textUtils}> {item?.location} </Text>
+                                    <Text style={styles.textUtils}> ভাড়া:$ {item?.price}  </Text>
                                 </View>
-                               
                             </View>
                         </View>
                     ))
                 }
             </ScrollView>
-
         </>
     )
 }
@@ -187,7 +179,11 @@ const Properties = ({ navigation }) => {
 export default Properties
 
 const styles = StyleSheet.create({
-
+    content: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
     input: {
         backgroundColor: colors.color3,
         borderRadius: 10,
@@ -195,12 +191,30 @@ const styles = StyleSheet.create({
         paddingTop: 5,
         paddingLeft: 10,
         width: '15%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: 10
     },
     txt: {
         color: colors.color1,
-        fontSize: 16,
+        fontSize: 11,
         fontWeight: 'bold',
+    },
+    img: {
 
-    }
+    },
+    title: {
+        color: colors.color1,
+        fontWeight: 'bold',
+        fontSize: 11,
+        textAlign: 'justify',
+        paddingHorizontal: 2
+    },
+    textUtils: {
+        color: colors.color1,
+        fontWeight: 'bold',
+        fontSize: 10
+    },
 
 })

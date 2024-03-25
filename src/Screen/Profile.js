@@ -1,4 +1,4 @@
-import { Image,StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import AppHeader from '../components/AppHeader'
 import Entypo from 'react-native-vector-icons/Entypo'
@@ -27,82 +27,82 @@ const Profile = ({ navigation, user }) => {
 
         />
 
-        <View style={styles.profileContainer}>
+        <ScrollView>
+          <View style={{...styles.profileContainer,paddingTop:10}}>
 
-          <View style={styles.imgContainer}>
+            <View style={styles.imgContainer}>
 
-            <Image source={userImg} style={styles.image} />
+              <Image source={userImg} style={styles.image} />
 
-            <TouchableOpacity
-              style={{ alignItems: "flex-end", top: -20 }}
-            >
-              <Entypo name="pencil" size={24} color={colors.color8} />
+              <TouchableOpacity
+                style={{ alignItems: "flex-end", top: -20 }}
+              >
+                <Entypo name="pencil" size={24} color={colors.color8} />
 
+              </TouchableOpacity>
+
+            </View>
+            <View style={styles.textContainer}>
+              <Title style={styles.name}> Md Sujan </Title>
+              <Caption> Active since Aug,2024 </Caption>
+            </View>
+
+          </View>
+          <View style={{ style: 'flex', justifyContent: "space-between", flexDirection: "row", paddingRight: 5, paddingLeft: 5, }}>
+            <Title style={{ fontFamily: 'Cochin', fontSize: 11, fontWeight: 900 }}> Personal Information </Title>
+            <TouchableOpacity>
+              <Title style={{ fontFamily: 'Cochin', fontSize: 11, fontWeight: 900 }}> Edit </Title>
             </TouchableOpacity>
-
           </View>
-          <View style={styles.textContainer}>
-            <Title style={styles.name}>Vishal Pawar</Title>
-            <Caption> Active since Aug,2024 </Caption>
-          </View>
-
-        </View>
-
-
-        <View style={{ style: 'flex', justifyContent: "space-between", flexDirection: "row", paddingRight: 20, paddingLeft: 20, }}>
-          <Title style={{ fontFamily: 'Cochin', fontSize: 16, fontWeight: 900 }}> Personal Information </Title>
-          <TouchableOpacity>
-            <Title style={{ fontFamily: 'Cochin', fontSize: 16, fontWeight: 900 }}> Edit </Title>
-          </TouchableOpacity>
-        </View>
-        <View style={{ paddingRight: 20, paddingLeft: 20, marginTop: 10, gap: 5 }}>
-          <View style={styles.bioContainer}>
-            <View style={styles.bioContent}>
-              <IonIcon name="mail-outline" size={40} color={colors.color8} />
-              <Text style={styles.bioTxt}> Email: </Text>
-            </View>
-            <Text style={styles.bioTxt}> mdsujan134523@gmail.com </Text>
-          </View>
-          <View style={styles.bioContainer}>
-            <View style={styles.bioContent}>
-              <IonIcon name="call-outline" size={40} color={colors.color8} />
-              <Text style={styles.bioTxt}> Phone: </Text>
-            </View>
-            <Text style={styles.bioTxt}> +9901615951637 </Text>
-          </View>
-          <View style={styles.bioContainer}>
-
-            <View style={styles.bioContent}>
-              <IonIcon name="location-outline" size={40} color={colors.color8} />
-              <Text style={styles.bioTxt}> Email: </Text>
-            </View>
-            <Text style={styles.bioTxt}> Kalabagan,Dhaka-1205 </Text>
-          </View>
-        </View>
-
-        <View style={{ paddingLeft: 20, paddingRight: 20 }}>
-          <View style={{ style: 'flex', justifyContent: "space-between", flexDirection: "row", marginTop: 15 }}>
-            <Title style={{ fontFamily: 'Cochin', fontSize: 16, fontWeight: 900 }}> Utilities </Title>
-          </View>
-          <View>
-
-            <TouchableOpacity style={{ ...styles.bioContainer, marginTop: 10 }}>
+          <View style={{ paddingRight: 5, paddingLeft: 5, marginTop: 10, gap: 5 }}>
+            <View style={styles.bioContainer}>
               <View style={styles.bioContent}>
-                <IonIcon name="cloud-download-outline" size={40} color={colors.color8} />
-                <Text style={styles.bioTxt}> Download </Text>
+                <IonIcon name="mail-outline" size={30} color={colors.color8} />
+                <Text style={styles.bioTxt}> Email: </Text>
               </View>
-              <IonIcon name="chevron-forward-outline" size={40} color={colors.color8} />
-            </TouchableOpacity>
-            <TouchableOpacity style={{ ...styles.bioContainer, marginTop: 5 }}>
+              <Text style={styles.bioTxt}> mdsujan134523@gmail.com </Text>
+            </View>
+            <View style={styles.bioContainer}>
               <View style={styles.bioContent}>
-                <IonIcon name="help-outline" size={40} color={colors.color8} />
-                <Text style={styles.bioTxt}> Helps </Text>
+                <IonIcon name="call-outline" size={30} color={colors.color8} />
+                <Text style={styles.bioTxt}> Phone: </Text>
               </View>
-              <IonIcon name="chevron-forward-outline" size={40} color={colors.color8} />
-            </TouchableOpacity>
+              <Text style={styles.bioTxt}> +9901615951637 </Text>
+            </View>
+            <View style={styles.bioContainer}>
 
+              <View style={styles.bioContent}>
+                <IonIcon name="location-outline" size={30} color={colors.color8} />
+                <Text style={styles.bioTxt}> Email: </Text>
+              </View>
+              <Text style={styles.bioTxt}> Kalabagan,Dhaka-1205 </Text>
+            </View>
           </View>
-        </View>
+
+          <View style={{ paddingLeft:5, paddingRight:5}}>
+            <View style={{ style: 'flex', justifyContent: "space-between", flexDirection: "row", marginTop: 15 }}>
+              <Title style={{ fontFamily: 'Cochin', fontSize: 11, fontWeight: 900 }}> Utilities </Title>
+            </View>
+            <View>
+
+              <TouchableOpacity style={{ ...styles.bioContainer, marginTop: 10 }}>
+                <View style={styles.bioContent}>
+                  <IonIcon name="cloud-download-outline" size={30} color={colors.color8} />
+                  <Text style={styles.bioTxt}> Download </Text>
+                </View>
+                <IonIcon name="chevron-forward-outline" size={30} color={colors.color8} />
+              </TouchableOpacity>
+              <TouchableOpacity style={{ ...styles.bioContainer, marginTop: 5 }}>
+                <View style={styles.bioContent}>
+                  <IonIcon name="help-outline" size={30} color={colors.color8} />
+                  <Text style={styles.bioTxt}> Helps </Text>
+                </View>
+                <IonIcon name="chevron-forward-outline" size={30} color={colors.color8} />
+              </TouchableOpacity>
+
+            </View>
+          </View>
+        </ScrollView>
 
       </View>
 
@@ -116,6 +116,7 @@ export default Profile
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+
   },
   profileContainer: {
     flex: 0.8,
@@ -154,11 +155,11 @@ const styles = StyleSheet.create({
     gap: 10
   },
   bioTxt: {
-    fontSize: 15,
+    fontSize: 10,
     fontWeight: "bold",
   },
   name: {
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: 'bold'
   }
 })

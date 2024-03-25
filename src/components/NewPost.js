@@ -47,8 +47,6 @@ export const demoData = [
 
 
 const NewPost = () => {
-
-
     return (
         <View>
             <Text style={styles.txt}>নতুন পোস্ট সমূহ</Text>
@@ -58,7 +56,6 @@ const NewPost = () => {
                         demoData &&
                         demoData.map((item) => (
                             <ScrollView horizontal key={item?._id}
-
                                 contentContainerStyle={{
                                     alignItems: "center",
                                     gap: 10,
@@ -70,19 +67,18 @@ const NewPost = () => {
                                     width: 'auto'
                                 }}
                                 showsHorizontalScrollIndicator={false}
-
                             >
                                 <Image source={item.img} style={{ width: 150, height: 100, borderRadius: 10 }} />
                                 <View>
-                                    <Title> {item?.title} </Title>
+                                    <Title style={{ fontSize: 11 }}> {item?.title} </Title>
                                     <View style={{ display: "flex", alignItems: "center", gap: 5, flexDirection: "row" }}>
                                         <IonIcon name="storefront-outline" size={15} color={colors.color1} />
-                                        <Text style={{ fontSize: 15, color: colors.color1 }}> {item.bedRoom} ,{item?.diningRoom} ,{item?.washRoom} , {item?.balcony} </Text>
+                                        <Text style={{ fontSize: 10, color: colors.color1 }}> {item.bedRoom} ,{item?.diningRoom} ,{item?.washRoom} , {item?.balcony} </Text>
                                     </View>
                                     <View style={{ display: "flex", alignItems: "center", gap: 5, flexDirection: "row" }}>
-                                        <Text style={{ fontSize: 15, color: colors.color1 }}>ভাড়া: ${item.price} </Text>
+                                        <Text style={{ fontSize: 11, color: colors.color1 }}>ভাড়া: ${item.price} </Text>
                                         <IonIcon name="location-outline" size={15} color={colors.color1} />
-                                        <Text style={{ fontSize: 15, color: colors.color1 }}> {item?.location} </Text>
+                                        <Text style={{ fontSize: 11, color: colors.color1 }}> {item?.location} </Text>
                                     </View>
                                 </View>
                             </ScrollView>
@@ -99,7 +95,7 @@ export default NewPost
 const styles = StyleSheet.create({
     txt: {
         color: colors.color1,
-        fontSize: 16,
+        fontSize: 11,
         fontWeight: "bold",
     },
     content: {
@@ -107,8 +103,5 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         gap: 5,
         alignItems: "center",
-
-
     }
-
 })
