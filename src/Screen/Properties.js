@@ -6,6 +6,8 @@ import { colors } from '../utils/styles'
 import IonIcon from "react-native-vector-icons/Ionicons";
 import { Button } from 'react-native-paper';
 import { demoData } from '../components/NewPost';
+import PropertyCard from '../components/PropertyCard';
+import { useNavigation } from '@react-navigation/native';
 
 const categories = [
     "Bachelor",
@@ -19,6 +21,7 @@ const categories = [
 
 const Properties = ({ navigation }) => {
     const [category, setCategory] = useState("");
+    const navigate = useNavigation();
     return (
         <>
             <AppHeader
@@ -134,41 +137,13 @@ const Properties = ({ navigation }) => {
                 {
                     demoData &&
                     demoData.map((item) => (
-                        <View key={item?._id} style={{ backgroundColor: colors.color3, borderRadius: 5, display: 'flex', justifyContent: "center", alignItems: 'center', width: '100%' }}>
-                            <View>
-                                <Image source={item?.img} style={styles.img} />
-                            </View>
-                            <View style={{ marginTop: 5, width: '100%' }}>
-                                <Text style={styles.title}> {item?.title} </Text>
-                                <View style={{...styles.content,justifyContent: "space-between", paddingHorizontal: 5, paddingVertical: 10 }}>
-                                    <View style={{ display: 'flex', width: "50%" }}>
-                                        <View style={styles.content}>
-                                            <IonIcon name="bed-outline" size={20} color={colors.color1} />
-                                            <Text style={styles.textUtils}> {item?.bedRoom} </Text>
-                                        </View>
-                                        <View style={styles.content}>
-                                            <IonIcon name="file-tray-outline" size={20} color={colors.color1} />
-                                            <Text style={styles.textUtils}> {item?.washRoom} </Text>
-                                        </View>
-                                    </View>
-                                    <View style={{ display: 'flex', width: "30%" }}>
-                                        <View style={styles.content}>
-                                            <IonIcon name="checkmark-circle-outline" size={20} color={colors.color1} />
-                                            <Text style={styles.textUtils}> {item?.diningRoom} </Text>
-                                        </View>
-                                        <View style={styles.content}>
-                                            <IonIcon name="checkmark-circle-outline" size={20} color={colors.color1} />
-                                            <Text style={styles.textUtils}> {item?.balcony} </Text>
-                                        </View>
-                                    </View>
-                                </View>
-                                <View style={{...styles.content, paddingVertical: 10, gap: 5 }}>
-                                    <IonIcon name="location-outline" size={20} color={colors.color1} />
-                                    <Text style={styles.textUtils}> {item?.location} </Text>
-                                    <Text style={styles.textUtils}> ভাড়া:$ {item?.price}  </Text>
-                                </View>
-                            </View>
-                        </View>
+                        <PropertyCard
+                            key={item?._id}
+                            item={item}
+                            id={item?._id}
+                            navigate={navigate}
+
+                        />
                     ))
                 }
             </ScrollView>

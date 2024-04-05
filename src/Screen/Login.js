@@ -6,10 +6,11 @@ import { Button } from 'react-native-paper';
 import loginImg from "../../Assets/login.png";
 import { colors, defaultStyle } from '../utils/styles';
 import { Toast } from 'toastify-react-native';
+import { useNavigation } from '@react-navigation/native';
 
 
-const Login = ({ navigation }) => {
-
+const Login = () => {
+    const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -19,10 +20,9 @@ const Login = ({ navigation }) => {
             return;
         }
         console.log({ email, password })
-        Toast.success("Logged in")
-
+        Toast.success("Logged in");
+        navigation.navigate('App');
     }
-
     return (
         <SafeAreaView style={{ backgroundColor: colors.color1, flex: 1 }}>
             <View style={styles.container}>

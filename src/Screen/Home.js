@@ -2,7 +2,6 @@ import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "rea
 import AppHeader from "../components/AppHeader";
 import { colors } from "../utils/styles";
 import Banner from "../components/Banner";
-
 import categoryImg01 from "../../Assets/building1.png";
 import categoryImg02 from "../../Assets/family1.png";
 import categoryImg03 from "../../Assets/happy1.png";

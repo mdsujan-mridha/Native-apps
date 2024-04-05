@@ -15,6 +15,9 @@ import Login from './Screen/Login';
 import Footer from './components/Footer';
 import ToastManager from 'toastify-react-native';
 import Register from './Screen/Register';
+import Home from './Screen/Home';
+import Properties from './Screen/Properties';
+import PropertyDetails from './Screen/PropertyDetails';
 
 
 
@@ -29,6 +32,7 @@ function App(): React.JSX.Element {
         <Stack.Screen name="App" component={AppStack} options={{ headerShown: false }} />
         <Stack.Screen name='Login' component={Login} />
         <Stack.Screen name='Register' component={Register} options={{ headerShown: false }} />
+        <Stack.Screen name='propertyDetails' component={PropertyDetails} options={{ headerShown: false }} />
       </Stack.Navigator>
       <ToastManager />
       <Footer />
