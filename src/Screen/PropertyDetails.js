@@ -17,7 +17,7 @@ const PropertyDetails = ({ navigation }) => {
     balcony: "২ ব্যলকুনি",
     price: "20000",
     location: "ধানমন্ডি ঢাকা-১২০৫,বাংলাদশে"
-  },
+  }
 
   return (
     <View>
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   propertyImage: {
-
+    
   }
 
 });
