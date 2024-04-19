@@ -2,7 +2,7 @@ import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react';
 import propertyImg from "../../Assets/property.png";
 import AppHeader from '../components/AppHeader';
-import { colors } from '../utils/styles';
+import { colors, defaultStyle } from '../utils/styles';
 import IonIcon from "react-native-vector-icons/Ionicons";
 
 const PropertyDetails = ({ navigation }) => {
@@ -127,12 +127,42 @@ const PropertyDetails = ({ navigation }) => {
               </View>
             </ScrollView>
             <View>
-              <Text style={{color:colors.color1,fontWeight:900}}> Contact for booking: </Text>
+              <Text style={{ color: colors.color1, fontWeight: 900 }}> Contact for booking: </Text>
+              <View style={{ ...defaultStyle.rowView, gap: 5, marginTop: 5 }}>
+                <IonIcon name="call-outline" size={15} color={colors.color1} />
+                <Text style={{ color: colors.color1 }}> +8801615951638 </Text>
+              </View>
             </View>
+            <View>
+              <Text> বিজ্ঞাপণ দাতা </Text>
+              <View style={{ ...defaultStyle.rowView, height: 120, backgroundColor: colors.color7, borderRadius: 9, borderWidth: 1, borderColor: 'gray', gap: 20 }}>
+                <IonIcon name="person-outline" size={50} color={colors.color1} style={{ paddingLeft: 10 }} />
+                <View>
+                  <Text style={{ color: colors.color1 }}> Md Sujan </Text>
+                  <Text style={{ color: colors.color1 }}> +8801615951638 </Text>
+                </View>
+
+              </View>
+            </View>
+            <View>
+              <Text style={{ color: colors.color1, fontSize: 17, fontWeight: 900 }}> সতর্কতা </Text>
+              <View style={{ ...defaultStyle.rowView, paddingHorizontal: 10, height: 150, backgroundColor: "#f2d7d5", borderRadius: 10, marginTop: 10 }}>
+                <Text style={{ color: colors.color1 }}>
+                  কোন প্রকার আর্থিক লেনদেনের সাথে আমরা জড়িত না।যেকোন প্রকার লেনদেনে গ্রাহকের দায়িত্ব নিজেরাই নেবেন। কেউ কোন প্রকার প্রতারণায় স্বীকার হলে তার দায় আমরা নিবো না।আমরা আপনার নিরাপত্তার স্বার্থে যাচাইবাচাই করে বিজ্ঞাপণ যুক্ত করি।
+                </Text>
+              </View>
+            </View>
+              <View style={{ ...defaultStyle.rowView, height: 120, backgroundColor: "#f2d7d5", borderRadius: 9 }}>
+                <IonIcon name="alert-circle-outline" size={25} color={colors.color1} style={{ paddingLeft: 10 }} />
+                <View>
+                  <Text style={{ color: colors.color1 }}> বিজ্ঞাপনে কোন প্রকার অসামজ্ঞস্য তথ্য 
+                  পেলে এখনই রিপোর্ট করুণ </Text>
+                </View>
+              </View>
           </View>
         </View>
-      </ScrollView>
-    </View>
+      </ScrollView >
+    </View >
   )
 }
 
@@ -149,7 +179,7 @@ const styles = StyleSheet.create({
     width: '90%',
     display: 'flex',
     gap: 10,
-    marginBottom:20
+    marginBottom: 20
 
   },
   details: {

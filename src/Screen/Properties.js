@@ -1,5 +1,5 @@
 
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useState } from 'react'
 import AppHeader from '../components/AppHeader'
 import { colors } from '../utils/styles'
@@ -42,7 +42,7 @@ const Properties = ({ navigation }) => {
                         placeholder='Search properties...'
                         style={{
                             backgroundColor: colors.color3,
-                            color: colors.color3,
+                            color: colors.color1,
                             padding: 10,
                             borderRadius: 10,
                             height: 50,
@@ -108,17 +108,17 @@ const Properties = ({ navigation }) => {
                         <Text style={styles.txt}> সর্বোচ্চ টাকা: </Text>
                         <TextInput
                             placeholder='50000'
-                            style={styles.input}
+                            style={{ ...styles.input, color: colors.color1 }}
                         />
                         <Text style={styles.txt}> সর্বোনিম্ন টাকা: </Text>
                         <TextInput
                             placeholder='5000'
-                            style={styles.input}
+                            style={{ ...styles.input, color: colors.color1 }}
                         />
                         <Text style={styles.txt}> এলাকা: </Text>
                         <TextInput
                             placeholder='ধানমন্ডি'
-                            style={styles.input}
+                            style={{ ...styles.input, color: colors.color1 }}
                         />
                         <Button
                             style={{
