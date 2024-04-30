@@ -2,12 +2,20 @@
 import { Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import { Button } from 'react-native-paper';
+
 import loginImg from "../../Assets/login.png";
 import { colors, defaultStyle } from '../utils/styles';
 import { Toast } from 'toastify-react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Button } from 'react-native-paper';
 
+import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
+
+GoogleSignin.configure({
+    webClientId: '910527659496-es54rlvaa02fd08f15j7ougmrfghj2tu.apps.googleusercontent.com',
+});
 
 const Login = () => {
     const navigation = useNavigation();
@@ -22,6 +30,19 @@ const Login = () => {
         console.log({ email, password })
         Toast.success("Logged in");
         navigation.navigate('App');
+    }
+
+    async function onGoogleButtonPress() {
+        // Check if your device supports Google Play
+        await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+        // Get the users ID token
+        const { idToken } = await GoogleSignin.signIn();
+
+        // Create a Google credential with the token
+        const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+        // Sign-in the user with the credential
+        await auth().signInWithCredential(googleCredential);
     }
     return (
         <SafeAreaView style={{ backgroundColor: colors.color1, flex: 1 }}>
@@ -41,7 +62,13 @@ const Login = () => {
                     <TouchableOpacity>
                         <Text style={{ color: colors.color3, textAlign: 'right', fontSize: 12 }}> Forgot your password? </Text>
                     </TouchableOpacity>
-                    <Button style={styles.btn}> <Text style={{ color: colors.color3, fontSize: 11 }} onPress={submitHandler}> Login </Text> </Button>
+                    <Button style={styles.btn} onPress={submitHandler}> <Text style={{ color: colors.color3, fontSize: 11 }}> Login </Text> </Button>
+                    <TouchableOpacity style={{ display: 'flex', flexDirection: "row", alignItems: 'center', justifyContent: 'center', height: 40, backgroundColor: colors.color2, borderRadius: 100, marginTop: 10, gap: 10 }}
+                        onPress={onGoogleButtonPress}
+                    >
+                        <IonIcon name="logo-google" size={20} style={{ color: colors.color3 }} />
+                        <Text style={{ color: colors.color3, fontSize: 13 }} > Login With google </Text>
+                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigation.navigate('Register')}>
                         <Text style={{ color: colors.color3, fontSize: 12, textAlign: 'center', fontWeight: 900 }}> Don’t have an account? </Text>
                     </TouchableOpacity>

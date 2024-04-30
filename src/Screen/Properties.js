@@ -142,7 +142,6 @@ const Properties = ({ navigation }) => {
                             item={item}
                             id={item?._id}
                             navigate={navigate}
-
                         />
                     ))
                 }

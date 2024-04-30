@@ -23,7 +23,14 @@ export const defaultStyle = ({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
+        gap: 5,
+    },
+    basicView: {
+        display: 'flex',
+        padding: 20,
+        gap: 10
     }
+
 
 })
 

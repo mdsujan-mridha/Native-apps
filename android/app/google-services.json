@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "910527659496",
+    "project_id": "propertyapp-cecfa",
+    "storage_bucket": "propertyapp-cecfa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:910527659496:android:1ee6cd9b9e93039ff1f85d",
+        "android_client_info": {
+          "package_name": "com.authenticated"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "910527659496-d8p1gmhprau1k53hmoop4oiibb1qoqgj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.authenticated",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "910527659496-es54rlvaa02fd08f15j7ougmrfghj2tu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEaTaveXUSTczlcDcnzknPUbFJ-r44A6Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "910527659496-es54rlvaa02fd08f15j7ougmrfghj2tu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -157,9 +157,11 @@ const styles = StyleSheet.create({
   bioTxt: {
     fontSize: 10,
     fontWeight: "bold",
+    color:colors.color1,
   },
   name: {
     fontSize: 20,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: colors.color1,
   }
 })

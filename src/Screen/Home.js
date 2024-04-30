@@ -9,9 +9,33 @@ import categoryImg04 from "../../Assets/man(1)1.png";
 import categoryImg05 from "../../Assets/woman1.png";
 import categoryImg06 from "../../Assets/bed1.png";
 import NewPost from "../components/NewPost";
+import { FloatingAction } from "react-native-floating-action";
+import IonIcon from "react-native-vector-icons/Ionicons";
 
 
 const Home = ({ navigation }) => {
+
+    const actions = [
+        {
+            text: "বাড়িওয়ালা",
+            name: "home_rental",
+            position: 1,
+            icon: <IonIcon name="add-outline" size={25} />
+        },
+        {
+            text: "ভাড়াটিয়া",
+            name: "home_want",
+            position: 2,
+            icon: <IonIcon name="add-outline" size={25} />
+        },
+        {
+            text: "দোকান ভাড়া",
+            name: "shop_rental",
+            position: 3,
+            icon: <IonIcon name="add-outline" size={25} />
+        },
+
+    ];
 
     const categories = [
         {
@@ -98,6 +122,11 @@ const Home = ({ navigation }) => {
                 </View>
 
             </ScrollView>
+            <View>
+                <TouchableOpacity style={styles.floatingActionButton} onPress={()=>navigation.navigate('freepost')}>
+                    <IonIcon name="add-outline" size={25} color={colors.color5} />
+                </TouchableOpacity>
+            </View>
         </>
 
 
@@ -130,5 +159,14 @@ const styles = StyleSheet.create({
     img: {
         width: 30,
         height: 30,
+    },
+     floatingActionButton: {
+        position: "absolute",
+        bottom: 20,
+        right: 20,
+        backgroundColor: colors.color1,
+        padding: 15,
+        borderRadius: 50,
+        elevation: 5,
     }
 })
