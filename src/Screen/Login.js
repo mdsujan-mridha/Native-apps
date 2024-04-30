@@ -1,6 +1,6 @@
 
 import { Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import IonIcon from 'react-native-vector-icons/Ionicons';
 
 import loginImg from "../../Assets/login.png";
@@ -11,6 +11,8 @@ import { Button } from 'react-native-paper';
 
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { AuthContext } from '../utils/AuthContext';
+import Services from '../utils/Services';
 
 
 GoogleSignin.configure({
@@ -21,6 +23,9 @@ const Login = () => {
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [user, setUser] = useState(null);
+    const { userData, setUserData } = useContext(AuthContext);
+
 
     const submitHandler = () => {
         if (email == "" || password == "") {
@@ -33,17 +38,31 @@ const Login = () => {
     }
 
     async function onGoogleButtonPress() {
-        // Check if your device supports Google Play
-        await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-        // Get the users ID token
-        const { idToken } = await GoogleSignin.signIn();
+        try {
+            // Check if your device supports Google Play
+            await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+            // Get the users ID token
+            const userInfo = await GoogleSignin.signIn();
+            const { idToken } = await GoogleSignin.signIn();
+            // Create a Google credential with the token
+            const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+            // Sign-in the user with the credential
+            await auth().signInWithCredential(googleCredential);
+            setUserData(userInfo?.user);
+            setUser(userInfo?.user);
+            await Services.setUserAuth(userInfo?.user);
 
-        // Create a Google credential with the token
-        const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
-        // Sign-in the user with the credential
-        await auth().signInWithCredential(googleCredential);
+        } catch (error) {
+            Toast.error(error)
+        }
+
     }
+    if (user !== null) {
+        Toast.success("Logged in");
+        navigation.navigate('App');
+    }
+    console.log(user)
     return (
         <SafeAreaView style={{ backgroundColor: colors.color1, flex: 1 }}>
             <View style={styles.container}>
