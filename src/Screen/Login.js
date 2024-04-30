@@ -51,18 +51,15 @@ const Login = () => {
             setUserData(userInfo?.user);
             setUser(userInfo?.user);
             await Services.setUserAuth(userInfo?.user);
-
+            Toast.success("Logged in");
 
         } catch (error) {
             Toast.error(error)
         }
 
     }
-    if (user !== null) {
-        Toast.success("Logged in");
-        navigation.navigate('App');
-    }
-    console.log(user)
+ 
+    // console.log(user)
     return (
         <SafeAreaView style={{ backgroundColor: colors.color1, flex: 1 }}>
             <View style={styles.container}>

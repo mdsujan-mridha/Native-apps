@@ -53,22 +53,27 @@ function App() {
 
           {
             userData ? (
-              <Stack.Navigator screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="App" component={AppStack} options={{ headerShown: false }} />
-                <Stack.Screen name='Register' component={Register} options={{ headerShown: false }} />
-                <Stack.Screen name='propertyDetails' component={PropertyDetails} options={{ headerShown: false }} />
-                <Stack.Screen name='freepost' component={FreePost} options={{ headerShadowVisible: false }} />
-                <Stack.Screen name='Landlord' component={LandLordForm} options={{ headerShown: false }} />
-              </Stack.Navigator>
+              <>
+                <Stack.Navigator screenOptions={{ headerShown: false }}>
+                  <Stack.Screen name="App" component={AppStack} options={{ headerShown: false }} />
+
+                  <Stack.Screen name='propertyDetails' component={PropertyDetails} options={{ headerShown: false }} />
+                  <Stack.Screen name='freepost' component={FreePost} options={{ headerShadowVisible: false }} />
+                  <Stack.Screen name='Landlord' component={LandLordForm} options={{ headerShown: false }} />
+                </Stack.Navigator>
+                <ToastManager />
+                <Footer />
+              </>
             ) : (
               <Stack.Navigator>
                 <Stack.Screen name='Login' component={Login} options={{ headerShown: false }} />
+                <Stack.Screen name='Register' component={Register} options={{ headerShown: false }} />
               </Stack.Navigator>
             )
           }
 
-          <ToastManager />
-          <Footer />
+
+
         </NavigationContainer>
 
       </AuthContext.Provider>

@@ -1,12 +1,20 @@
 
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { colors } from '../utils/styles';
+import { AuthContext } from '../utils/AuthContext';
 
 
 const CustomDrawer = (props) => {
+
+    const { userData, setUserData } = useContext(AuthContext);
+    // console.log("user from drawer",userData);
+    const handleLogout = () => {
+        setUserData(null);
+    }
+
     return (
         <View style={{ flex: 1 }}>
             <DrawerContentScrollView {...props}
@@ -17,9 +25,10 @@ const CustomDrawer = (props) => {
                     style={{ padding: 20, marginTop: -10 }}
                 >
                     <Image
-                        source={require("../../Assets/user-profile.jpg")}
+                        source={{ uri: userData?.photo }}
                         style={{ height: 80, width: 80, borderRadius: 40, marginTop: 10 }}
                     />
+
                     <Text
                         style={{
                             color: '#fff',
@@ -27,7 +36,7 @@ const CustomDrawer = (props) => {
                             fontFamily: 'Roboto-Medium',
                             marginBottom: 5,
                         }}>
-                        John Doe
+                        {userData?.name}
                     </Text>
                     <Text
                         style={{
@@ -36,7 +45,7 @@ const CustomDrawer = (props) => {
                             fontFamily: 'Roboto-Medium',
                             marginBottom: 5,
                         }}>
-                        mdsujan134523@gmail.com
+                        {userData?.email}
                     </Text>
 
                 </ImageBackground>
@@ -59,7 +68,7 @@ const CustomDrawer = (props) => {
                         </Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => { }} style={{ paddingVertical: 15 }}>
+                <TouchableOpacity onPress={handleLogout} style={{ paddingVertical: 15 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Ionicons name="exit-outline" size={22} />
                         <Text
