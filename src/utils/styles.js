@@ -17,7 +17,7 @@ export const defaultStyle = ({
         borderBottomWidth: 1,
         borderBottomColor: colors.color3,
         padding: 15,
-        color: colors.color1,
+        color: colors.color5,
     },
     rowView: {
         display: 'flex',

@@ -26,17 +26,33 @@ const Login = () => {
     const [user, setUser] = useState(null);
     const { userData, setUserData } = useContext(AuthContext);
 
-
-    const submitHandler = () => {
+    //   sign in using email and password 
+    const submitHandler = async () => {
         if (email == "" || password == "") {
             Toast.error("Please enter email and password");
             return;
         }
-        console.log({ email, password })
-        Toast.success("Logged in");
-        navigation.navigate('App');
-    }
 
+        auth().signInWithEmailAndPassword(email, password)
+            .then(res => {
+                // console.log(res)
+                setUser(res.user);
+                setUserData(res.user);
+                Toast.success("Login Success");
+                Services.setUserAuth(res.user);
+            })
+            .catch(error => {
+                if (error.code === 'auth/email-already-in-use') {
+                    console.log('That email address is already in use!');
+                }
+
+                if (error.code === 'auth/invalid-email') {
+                    console.log('That email address is invalid!');
+                }
+            }
+            )
+    }
+    // sign in using google 
     async function onGoogleButtonPress() {
         try {
             // Check if your device supports Google Play
@@ -52,13 +68,11 @@ const Login = () => {
             setUser(userInfo?.user);
             await Services.setUserAuth(userInfo?.user);
             Toast.success("Logged in");
-
         } catch (error) {
             Toast.error(error)
         }
-
     }
- 
+
     // console.log(user)
     return (
         <SafeAreaView style={{ backgroundColor: colors.color1, flex: 1 }}>

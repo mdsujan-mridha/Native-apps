@@ -5,7 +5,7 @@ import { colors, defaultStyle } from '../utils/styles';
 import { Button } from 'react-native-paper';
 import { Toast } from 'toastify-react-native';
 import IonIcon from "react-native-vector-icons/Ionicons";
-
+import auth from '@react-native-firebase/auth';
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -17,8 +17,22 @@ const Register = () => {
             Toast.error("Please enter email and password");
             return;
         }
-        console.log({ name, email, password })
-        Toast.success("Register successfully!")
+
+        auth().createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+
+                userCredential.user.updateProfile({
+                    displayName: name,
+                    photoURL: "https://www.pngkey.com/png/detail/230-2301779_user-profile-default-avatar-png-white.png"
+                })
+                // console.log(userCredential)
+
+            })
+            .catch(err => {
+                console.log(err)
+                Toast.error(err.message);
+            })
+
     }
 
     return (
