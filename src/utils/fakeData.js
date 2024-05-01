@@ -58,3 +58,35 @@ export const propertyType = [
     "Seat Rent",
     "Sublet Rent",
 ]
+
+
+export const lookingFor = [
+    {
+      label: "Bachelor",
+      value: "Bachelor",
+    },
+    {
+      label: "Family",
+      value: "Family",
+    },
+    {
+      label: "Small Family",
+      value: "Small Family",
+    },
+    {
+      label: "Only Male Student",
+      value: "Only Male Student",
+    },
+    {
+      label: "Only Female Student",
+      value: "Only Female Student",
+    },
+    {
+      label: "Working Man",
+      value: "Working Man",
+    },
+    {
+      label: "Working Woman",
+      value: "Working Woman",
+    },
+  ];

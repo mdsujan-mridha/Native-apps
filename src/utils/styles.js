@@ -29,8 +29,26 @@ export const defaultStyle = ({
         display: 'flex',
         padding: 20,
         gap: 10
-    }
+    },
+    fontStyle: {
+        color: colors.color1,
+        fontSize: 17,
+        fontWeight: 900,
 
+    },
+    tinyButton: {
+        width: 30,
+        height: 30,
+        borderRadius: 100,
+        backgroundColor: colors.color1,
+        color: colors.color3,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignContent: 'center',
+        textAlign: 'center',
+        textAlignVertical: 'center'
+    }
 
 })
 
