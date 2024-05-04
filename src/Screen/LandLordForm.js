@@ -1,10 +1,10 @@
 
 import { Button, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AppHeader from '../components/AppHeader'
 import { colors, defaultImg, defaultStyle } from '../utils/styles'
 import { lookingFor, propertyType } from '../utils/fakeData'
-import { Checkbox, Provider } from 'react-native-paper'
+import { Checkbox, Provider, Button as PaperBtn } from 'react-native-paper'
 import DropDown from 'react-native-paper-dropdown'
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import DatePicker from 'react-native-date-picker'
@@ -39,6 +39,13 @@ const LandLordForm = ({ navigation }) => {
     const [location, setLocation] = useState("Dhanmondhi");
     const [isModalVisible, setModalVisible] = useState(false);
     const [imageUrl, setImageUrl] = useState(defaultImg);
+    const [isChecked, setIsChecked] = useState(false);
+    const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+
+    // function for handle terms and condition 
+    const handleCheckboxChange = () => {
+        setIsChecked(!isChecked);
+    };
 
     //  handle modal for image 
     const toggleModal = () => {
@@ -95,6 +102,44 @@ const LandLordForm = ({ navigation }) => {
     const openGalleryLib = async () => {
         const result = await launchImageLibrary();
         setImageUrl(result.assets[0]?.uri);
+    }
+
+    useEffect(() => {
+        // Check the validity of input fields and update the state of the submit button accordingly
+        const isValid =
+            phoneNumber.trim() !== "" &&
+            rentPrice.trim() !== "" &&
+            flatSize !== 0 &&
+            location.trim() !== "" &&
+            imageUrl.trim() !== "" &&
+            isChecked;
+        setIsSubmitDisabled(!isValid);
+    }, [phoneNumber, rentPrice, flatSize, location, imageUrl, isChecked]);
+
+    const handleSubmit = () => {
+
+
+
+        const formData = new FormData();
+
+        formData.append('phoneNumber', phoneNumber);
+        formData.append('looking', looking);
+        formData.append('rentPrice', rentPrice);
+        formData.append('bedRoom', bedRoom);
+        formData.append('washRoom', washRoom);
+        formData.append('barandha', barandha);
+        formData.append('florNo', florNo);
+        formData.append('selectedPropertyType', selectedPropertyType);
+        formData.append('flatSize', flatSize);
+        formData.append('date', date);
+        formData.append('location', location);
+        formData.append('imageUrl', {
+            uri: imageUrl,
+            type: 'image/jpeg',
+            name: 'image.jpg',
+        });
+        console.log(formData);
+
     }
 
     return (
@@ -333,7 +378,7 @@ const LandLordForm = ({ navigation }) => {
                             value={phoneNumber}
                             onChangeText={setPhoneNumber}
                         />
-                        <View style={{ flex: 1, marginTop: 10 }} >
+                        <View style={{ marginTop: 10 }} >
                             <TouchableOpacity onPress={toggleModal} style={{ ...defaultStyle.rowView, justifyContent: 'center', height: 40, backgroundColor: colors.color1, borderRadius: 100 }}>
                                 <Text style={{ color: colors.color3 }}> বাসার ছবি আপলোড করুন* </Text>
                             </TouchableOpacity>
@@ -352,7 +397,7 @@ const LandLordForm = ({ navigation }) => {
                                             source={{
                                                 uri: imageUrl
                                             }}
-                                            style={{ width: '100%', height: '100%' }}
+                                            style={{ width: '100%', height: 400 }}
                                         />
                                     </View>
                                     <View style={{ ...defaultStyle.rowView, justifyContent: 'center', marginTop: 10, position: 'absolute', bottom: 10, top: 'auto', right: 0, left: 0 }}>
@@ -366,6 +411,22 @@ const LandLordForm = ({ navigation }) => {
                                 </View>
                                 <Button title="Ok" onPress={toggleModal} />
                             </Modal>
+                        </View>
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text style={{ marginTop: 10 }}>I agree to the terms and conditions</Text>
+                            <Checkbox.Android
+                                status={isChecked ? 'checked' : 'unchecked'}
+                                onPress={handleCheckboxChange}
+                            />
+                            <PaperBtn
+                                mode="contained"
+                                disabled={!isChecked || isSubmitDisabled}
+                                onPress={
+                                    handleSubmit
+                                }
+                            >
+                                Submit
+                            </PaperBtn>
                         </View>
                     </View>
                 </ScrollView>
