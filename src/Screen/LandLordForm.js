@@ -1,17 +1,28 @@
 
-import { Button, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Button, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import AppHeader from '../components/AppHeader'
-import { colors, defaultStyle } from '../utils/styles'
+import { colors, defaultImg, defaultStyle } from '../utils/styles'
 import { lookingFor, propertyType } from '../utils/fakeData'
 import { Checkbox, Provider } from 'react-native-paper'
 import DropDown from 'react-native-paper-dropdown'
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import DatePicker from 'react-native-date-picker'
+import Modal from "react-native-modal";
+import { Dimensions } from 'react-native';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
+
+const deviceWidth = Dimensions.get("window").width;
+const deviceHeight =
+    Platform.OS === "ios"
+        ? Dimensions.get("window").height
+        : require("react-native-extra-dimensions-android").get(
+            "REAL_WINDOW_HEIGHT"
+        );
 
 
 const LandLordForm = ({ navigation }) => {
-
+    const [phoneNumber, setPhoneNumber] = useState("01788888888");
     const [looking, setLooking] = useState("");
     const [showMultiSelectDropDown, setShowMultiSelectDropDown] = useState(false);
     const data = ['Wifi', 'Lift', 'Gas', 'Parking'];
@@ -26,13 +37,21 @@ const LandLordForm = ({ navigation }) => {
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [location, setLocation] = useState("Dhanmondhi");
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [imageUrl, setImageUrl] = useState(defaultImg);
 
+    //  handle modal for image 
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    };
+
+    //   function for handle date 
     const handleDateChange = (selectedDate) => {
         setShowDatePicker(false);
         setDate(selectedDate);
     };
 
-
+    //   function for red checkbox selected item 
     const handleCheckBox = (item) => {
         if (selectedItems.includes(item)) {
             setSelectedItems(selectedItems.filter((selectedItem) => selectedItem !== item));
@@ -41,23 +60,23 @@ const LandLordForm = ({ navigation }) => {
         }
     };
 
-
-
+    // function for increment input value 
     const incrementField = (field, setter) => {
         setter(prevState => prevState + 1);
     };
-
+    // function for decrement input value 
     const decrementField = (field, setter) => {
         setter(prevState => Math.max(prevState - 1, 0)); // Ensure the value doesn't go below 0
     };
-
+    // function for increment flor No input value 
     const incrementFlorNo = () => {
         setFlorNo(florNo + 1); // Update directly as a number
     };
+    // function for decrement flor No input value 
     const decrementFlorNo = () => {
         setFlorNo(Math.max(florNo - 1, 0)); // Ensure the value doesn't go below 0
     }
-
+    //   function for property type selection 
     const toggleItemSelection = (item) => {
         if (selectedPropertyType.includes(item)) {
             setSelectedPropertyType(selectedPropertyType.filter((selectedItem) => selectedItem !== item));
@@ -66,9 +85,18 @@ const LandLordForm = ({ navigation }) => {
         }
     };
 
-    // console.log("Property Type:", selectedPropertyType);
+    // function for open camera 
+    const openCameraLib = async () => {
 
-    console.log(date);
+        const result = await launchCamera();
+        setImageUrl(result.assets[0]?.uri);
+    }
+
+    const openGalleryLib = async () => {
+        const result = await launchImageLibrary();
+        setImageUrl(result.assets[0]?.uri);
+    }
+
     return (
         <>
             <AppHeader
@@ -299,6 +327,46 @@ const LandLordForm = ({ navigation }) => {
                             value={location}
                             onChangeText={setLocation}
                         />
+                        <Text style={styles.rentDetailsTxt}> আপনার ফোন নাম্বার দিন * </Text>
+                        <TextInput
+                            style={styles.rentDetailsInput}
+                            value={phoneNumber}
+                            onChangeText={setPhoneNumber}
+                        />
+                        <View style={{ flex: 1, marginTop: 10 }} >
+                            <TouchableOpacity onPress={toggleModal} style={{ ...defaultStyle.rowView, justifyContent: 'center', height: 40, backgroundColor: colors.color1, borderRadius: 100 }}>
+                                <Text style={{ color: colors.color3 }}> বাসার ছবি আপলোড করুন* </Text>
+                            </TouchableOpacity>
+                            <Modal
+                                isVisible={isModalVisible}
+                                deviceHeight={deviceHeight}
+                                deviceWidth={deviceWidth}
+                                style={{ backgroundColor: 'white', borderRadius: 10 }}
+                            >
+                                <View style={{ flex: 1 }}>
+                                    <Text style={{ textAlign: 'center', paddingTop: 20, fontSize: 18, color: 'red' }}> বাসায় ছবি আপলোড করুন* </Text>
+                                    <Text style={{ padding: 20, fontSize: 14, color: colors.color1 }}> বাসার ছবি ব্যাতীত কোন বিজ্ঞাপন আমাদের Application -এ রাখা হবে না। </Text>
+                                    <View style={{ width: '100%', height: 100 }}>
+                                        <Image
+                                            resizeMode='contain'
+                                            source={{
+                                                uri: imageUrl
+                                            }}
+                                            style={{ width: '100%', height: '100%' }}
+                                        />
+                                    </View>
+                                    <View style={{ ...defaultStyle.rowView, justifyContent: 'center', marginTop: 10, position: 'absolute', bottom: 10, top: 'auto', right: 0, left: 0 }}>
+                                        <TouchableOpacity onPress={openCameraLib} style={{ ...defaultStyle.rowView, justifyContent: 'center', width: 120, height: 40, borderRadius: 100, backgroundColor: colors.color1 }}>
+                                            <Text style={{ color: colors.color3, textAlign: 'center' }}> Open camera </Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={openGalleryLib} style={{ ...defaultStyle.rowView, justifyContent: 'center', width: 120, height: 40, borderRadius: 100, backgroundColor: colors.color1 }}>
+                                            <Text style={{ color: colors.color3, textAlign: 'center' }}> Open Gallery </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                                <Button title="Ok" onPress={toggleModal} />
+                            </Modal>
+                        </View>
                     </View>
                 </ScrollView>
             </Provider>
