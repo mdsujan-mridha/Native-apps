@@ -22,6 +22,7 @@ const deviceHeight =
 
 
 const LandLordForm = ({ navigation }) => {
+    const [title, setTitle] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("01788888888");
     const [looking, setLooking] = useState("");
     const [showMultiSelectDropDown, setShowMultiSelectDropDown] = useState(false);
@@ -184,6 +185,12 @@ const LandLordForm = ({ navigation }) => {
                                         </Text>
                                     </TouchableOpacity>
                                 ))}
+                        </View>
+
+                        <View>
+                            <TextInput
+
+                            />
                         </View>
 
                         <View style={{ marginTop: 10 }}>

@@ -1,3 +1,28 @@
 {
-  "extends": "@react-native/typescript-config/tsconfig.json"
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "jsx": "react-native",
+    "baseUrl": "./src/",
+    "paths": {
+      "@store": [
+        "store"
+      ],
+      "@redux": [
+        "redux"
+      ],
+      "@components": [
+        "components"
+      ],
+      "@screens": [
+        "screens"
+      ],
+      "@assets": [
+        "assets"
+      ],
+    }
+  },
+  "include": [
+    "node_modules"
+  ]
 }

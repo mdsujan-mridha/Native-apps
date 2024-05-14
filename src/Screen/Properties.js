@@ -1,6 +1,6 @@
 
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AppHeader from '../components/AppHeader'
 import { colors } from '../utils/styles'
 import IonIcon from "react-native-vector-icons/Ionicons";
@@ -8,6 +8,10 @@ import { Button } from 'react-native-paper';
 import { demoData } from '../components/NewPost';
 import PropertyCard from '../components/PropertyCard';
 import { useNavigation } from '@react-navigation/native';
+import Slider from '@react-native-community/slider';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearErrors, getAllProperty } from '../redux/action/propertyAction';
+import { Toast } from 'toastify-react-native';
 
 const categories = [
     "Bachelor",
@@ -20,8 +24,35 @@ const categories = [
 ]
 
 const Properties = ({ navigation }) => {
+    const dispatch = useDispatch();
+    const { properties, loading, error } = useSelector((state) => state.properties)
     const [category, setCategory] = useState("");
     const navigate = useNavigation();
+    const [price, setPrice] = useState(50000);
+
+
+    // handle Price function 
+    const handlePrice = (value) => {
+        // console.log(value);
+        const inputPrice = parseInt(value);
+        setPrice(inputPrice);
+        // console.log(inputPrice);
+    }
+    // console.log(price);
+
+    useEffect(() => {
+
+        if (error) {
+            Toast.error(error);
+            dispatch(clearErrors())
+        }
+
+        dispatch(getAllProperty())
+
+    }, [dispatch, error])
+
+    console.log(properties);
+
     return (
         <>
             <AppHeader
@@ -36,103 +67,99 @@ const Properties = ({ navigation }) => {
                 navigation={navigation}
                 optionalFunction={() => console.log("optionalBtnPress")}
             />
-            <View>
-                <View style={{ backgroundColor: colors.color1, height: 70, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                    <TextInput
-                        placeholder='Search properties...'
+
+            <View style={{ backgroundColor: colors.color1, height: 70, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                <TextInput
+                    placeholder='Search properties...'
+                    style={{
+                        backgroundColor: colors.color3,
+                        color: colors.color1,
+                        padding: 10,
+                        borderRadius: 10,
+                        height: 50,
+                        margin: 10,
+                        width: '93%',
+                    }}
+                />
+                <IonIcon name="search-outline" size={25} color={colors.color1} style={{ marginLeft: -50 }} />
+            </View>
+            <View style={{ backgroundColor: colors.color7, paddingBottom: 10 }}>
+                <ScrollView
+                    horizontal
+                    contentContainerStyle={{
+                        paddingTop: 10,
+                        alignItems: "center",
+                        gap: 10,
+                        backgroundColor: colors.color7,
+                        paddingBottom: 5
+                    }}
+                    showsHorizontalScrollIndicator={false}
+                >
+                    {
+                        categories &&
+                        categories?.map((item, index) => (
+                            <Button
+                                key={index}
+                                style={{
+                                    backgroundColor: colors.color3,
+                                    borderRadius: 100,
+                                    margin: 5,
+                                    height: 40,
+                                }}
+                                onPress={() => setCategory(item)}
+                            >
+                                <Text style={styles.txt}> {item} </Text>
+                            </Button>
+                        ))
+                    }
+                    <Button
                         style={{
                             backgroundColor: colors.color3,
-                            color: colors.color1,
-                            padding: 10,
-                            borderRadius: 10,
-                            height: 50,
-                            margin: 10,
-                            width: '93%',
+                            borderRadius: 100,
+                            margin: 5,
+                            height: 40,
                         }}
+                    >
+                        <Text style={styles.txt}> Clear All </Text>
+                    </Button>
+
+                </ScrollView>
+
+                <View
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        backgroundColor: colors.color7,
+                        width: '90%',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}
+                >
+
+                    <Slider
+                        style={{ width: 300, height: 40 }}
+                        minimumValue={5000}
+                        maximumValue={50000}
+                        minimumTrackTintColor="#000"
+                        maximumTrackTintColor="#000000"
+                        onValueChange={handlePrice}
+                        step={1000}
+                        value={price}
                     />
-                    <IonIcon name="search-outline" size={25} color={colors.color1} style={{ marginLeft: -50 }} />
-                </View>
-                <View style={{ backgroundColor: colors.color7, height: 120 }}>
-                    <ScrollView
-                        horizontal
-                        contentContainerStyle={{
-                            alignItems: "center",
-                            gap: 10,
-                            backgroundColor: colors.color7,
-                            paddingBottom: 5
+
+                    <Button
+                        style={{
+                            backgroundColor: colors.color3,
+                            borderRadius: 100,
+                            margin: 5,
+                            height: 40,
                         }}
-                        showsHorizontalScrollIndicator={false}
                     >
-                        {
-                            categories &&
-                            categories?.map((item, index) => (
-                                <Button
-                                    key={index}
-                                    style={{
-                                        backgroundColor: colors.color3,
-                                        borderRadius: 100,
-                                        margin: 5,
-                                        height: 40,
-                                    }}
-                                    onPress={() => setCategory(item)}
-                                >
-                                    <Text style={styles.txt}> {item} </Text>
-                                </Button>
-                            ))
-                        }
-                        <Button
-                            style={{
-                                backgroundColor: colors.color3,
-                                borderRadius: 100,
-                                margin: 5,
-                                height: 40,
-                            }}
-                        >
-                            <Text style={styles.txt}> Clear All </Text>
-                        </Button>
-
-                    </ScrollView>
-
-                    <ScrollView
-                        horizontal
-                        contentContainerStyle={{
-                            alignItems: "center",
-                            gap: 5,
-                            backgroundColor: colors.color7,
-                            paddingBottom: 5,
-
-                        }}
-                        showsHorizontalScrollIndicator={false}
-                    >
-
-                        <Text style={styles.txt}> সর্বোচ্চ টাকা: </Text>
-                        <TextInput
-                            placeholder='50000'
-                            style={{ ...styles.input, color: colors.color1 }}
-                        />
-                        <Text style={styles.txt}> সর্বোনিম্ন টাকা: </Text>
-                        <TextInput
-                            placeholder='5000'
-                            style={{ ...styles.input, color: colors.color1 }}
-                        />
-                        <Text style={styles.txt}> এলাকা: </Text>
-                        <TextInput
-                            placeholder='ধানমন্ডি'
-                            style={{ ...styles.input, color: colors.color1 }}
-                        />
-                        <Button
-                            style={{
-                                backgroundColor: colors.color3,
-                                borderRadius: 100,
-                                margin: 5,
-                                height: 40,
-                            }}
-                        >
-                            <Text> Clear All </Text>
-                        </Button>
-                    </ScrollView>
+                        <Text> Clear All </Text>
+                    </Button>
                 </View>
             </View>
+
             <ScrollView contentContainerStyle={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 15 }} showsVerticalScrollIndicator={false}>
                 {
                     demoData &&

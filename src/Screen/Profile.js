@@ -1,5 +1,5 @@
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import AppHeader from '../components/AppHeader'
 import Entypo from 'react-native-vector-icons/Entypo'
 import userImg from '../../Assets/user-profile.jpg';
@@ -7,9 +7,24 @@ import { colors } from '../utils/styles';
 import { Caption, Title } from 'react-native-paper';
 
 import IonIcon from "react-native-vector-icons/Ionicons";
+import { AuthContext } from '../utils/AuthContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSingleUser, loadUser } from '../redux/action/userAction';
 
 
-const Profile = ({ navigation, user }) => {
+const Profile = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+  const { userData, setUserData } = useContext(AuthContext);
+  const id = userData.uid
+  useEffect(() => {
+
+    dispatch(getSingleUser(id));
+
+  }, [dispatch, id])
+
+  console.log(user?.data?.phoneNumber);
+
   return (
     <>
       <View style={styles.container}>
@@ -24,15 +39,16 @@ const Profile = ({ navigation, user }) => {
           optionalIcon="bell"
           navigation={navigation}
           optionalFunction={() => console.log("optionalBtnPress")}
-
         />
 
         <ScrollView>
-          <View style={{...styles.profileContainer,paddingTop:10}}>
+          <View style={{ ...styles.profileContainer, paddingTop: 10 }}>
 
             <View style={styles.imgContainer}>
 
-              <Image source={userImg} style={styles.image} />
+              <Image
+                source={{ uri: userData?.photo || userData.photoURL }}
+                style={styles.image} />
 
               <TouchableOpacity
                 style={{ alignItems: "flex-end", top: -20 }}
@@ -43,7 +59,7 @@ const Profile = ({ navigation, user }) => {
 
             </View>
             <View style={styles.textContainer}>
-              <Title style={styles.name}> Md Sujan </Title>
+              <Title style={styles.name}> {userData?.name || userData.displayName}</Title>
               <Caption> Active since Aug,2024 </Caption>
             </View>
 
@@ -60,7 +76,7 @@ const Profile = ({ navigation, user }) => {
                 <IonIcon name="mail-outline" size={30} color={colors.color8} />
                 <Text style={styles.bioTxt}> Email: </Text>
               </View>
-              <Text style={styles.bioTxt}> mdsujan134523@gmail.com </Text>
+              <Text style={styles.bioTxt}>  {userData?.email} </Text>
             </View>
             <View style={styles.bioContainer}>
               <View style={styles.bioContent}>
@@ -79,7 +95,7 @@ const Profile = ({ navigation, user }) => {
             </View>
           </View>
 
-          <View style={{ paddingLeft:5, paddingRight:5}}>
+          <View style={{ paddingLeft: 5, paddingRight: 5 }}>
             <View style={{ style: 'flex', justifyContent: "space-between", flexDirection: "row", marginTop: 15 }}>
               <Title style={{ fontFamily: 'Cochin', fontSize: 11, fontWeight: 900 }}> Utilities </Title>
             </View>
@@ -157,7 +173,7 @@ const styles = StyleSheet.create({
   bioTxt: {
     fontSize: 10,
     fontWeight: "bold",
-    color:colors.color1,
+    color: colors.color1,
   },
   name: {
     fontSize: 20,
