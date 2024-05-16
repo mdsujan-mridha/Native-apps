@@ -1,12 +1,15 @@
 
 
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { colors } from '../utils/styles'
 import propertyImg from "../../Assets/property.png";
 import { Title } from 'react-native-paper';
 
 import IonIcon from "react-native-vector-icons/Ionicons";
+import { useDispatch, useSelector } from 'react-redux';
+import { Toast } from 'toastify-react-native';
+import { clearErrors, getAllProperty } from '../redux/action/propertyAction';
 
 export const demoData = [
     {
@@ -47,14 +50,29 @@ export const demoData = [
 
 
 const NewPost = () => {
+    const dispatch = useDispatch();
+    const { properties, loading, error } = useSelector((state) => state.properties);
+    const newProperty = properties.slice(8, 11);
+    // console.log(newProperty);
+
+    useEffect(() => {
+        if (error) {
+            Toast.error(error);
+            console.log(error);
+            dispatch(clearErrors())
+        }
+        dispatch(getAllProperty())
+
+    }, [dispatch, error]);
+    // console.log(properties);
     return (
         <View>
             <Text style={styles.txt}>নতুন পোস্ট সমূহ</Text>
             <View>
                 <View style={{ marginTop: 10, gap: 5 }}>
                     {
-                        demoData &&
-                        demoData.map((item) => (
+                        newProperty &&
+                        newProperty.map((item) => (
                             <ScrollView horizontal key={item?._id}
                                 contentContainerStyle={{
                                     alignItems: "center",
@@ -68,15 +86,15 @@ const NewPost = () => {
                                 }}
                                 showsHorizontalScrollIndicator={false}
                             >
-                                <Image source={item.img} style={{ width: 150, height: 100, borderRadius: 10 }} />
+                                <Image source={{ uri: item?.image }} style={{ width: 150, height: 100, borderRadius: 10 }} />
                                 <View>
                                     <Title style={{ fontSize: 11 }}> {item?.title} </Title>
                                     <View style={{ display: "flex", alignItems: "center", gap: 5, flexDirection: "row" }}>
                                         <IonIcon name="storefront-outline" size={15} color={colors.color1} />
-                                        <Text style={{ fontSize: 10, color: colors.color1 }}> {item.bedRoom} ,{item?.diningRoom} ,{item?.washRoom} , {item?.balcony} </Text>
+                                        <Text style={{ fontSize: 10, color: colors.color1 }}> {item?.bedRoom}বেডরুম,{item?.washRoom} বাথরুম , {item?.barandha}বারান্দা </Text>
                                     </View>
                                     <View style={{ display: "flex", alignItems: "center", gap: 5, flexDirection: "row" }}>
-                                        <Text style={{ fontSize: 11, color: colors.color1 }}>ভাড়া: ${item.price} </Text>
+                                        <Text style={{ fontSize: 11, color: colors.color1 }}>ভাড়া: ${item?.rentPrice} </Text>
                                         <IonIcon name="location-outline" size={15} color={colors.color1} />
                                         <Text style={{ fontSize: 11, color: colors.color1 }}> {item?.location} </Text>
                                     </View>

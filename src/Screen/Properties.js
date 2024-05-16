@@ -41,17 +41,15 @@ const Properties = ({ navigation }) => {
     // console.log(price);
 
     useEffect(() => {
-
         if (error) {
             Toast.error(error);
+            console.log(error);
             dispatch(clearErrors())
         }
-
         dispatch(getAllProperty())
 
     }, [dispatch, error])
-
-    console.log(properties);
+    // console.log(properties);
 
     return (
         <>
@@ -162,8 +160,8 @@ const Properties = ({ navigation }) => {
 
             <ScrollView contentContainerStyle={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 15 }} showsVerticalScrollIndicator={false}>
                 {
-                    demoData &&
-                    demoData.map((item) => (
+                    properties &&
+                    properties.map((item) => (
                         <PropertyCard
                             key={item?._id}
                             item={item}

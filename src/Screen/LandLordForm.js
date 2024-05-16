@@ -1,6 +1,6 @@
 
 import { Button, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import AppHeader from '../components/AppHeader'
 import { colors, defaultImg, defaultStyle } from '../utils/styles'
 import { lookingFor, propertyType } from '../utils/fakeData'
@@ -11,6 +11,13 @@ import DatePicker from 'react-native-date-picker'
 import Modal from "react-native-modal";
 import { Dimensions } from 'react-native';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
+import mime from "mime";
+import { AuthContext } from '../utils/AuthContext'
+import { useDispatch, useSelector } from 'react-redux'
+import { clearErrors, createProperty } from '../redux/action/propertyAction'
+import { Toast } from 'toastify-react-native'
+import { NEW_PROPERTY_RESET } from '../redux/constant/propertyConstant'
+import axios from 'axios'
 
 const deviceWidth = Dimensions.get("window").width;
 const deviceHeight =
@@ -22,7 +29,10 @@ const deviceHeight =
 
 
 const LandLordForm = ({ navigation }) => {
-    const [title, setTitle] = useState("")
+    const { userData, setUserData } = useContext(AuthContext);
+    const dispatch = useDispatch();
+    const { error, success } = useSelector((state) => state.newProperty)
+    const [title, setTitle] = useState("আগামি ১লা জুন থেকে ২ রুমে ফ্লাট বাসা ভাড়া দেওয়া  হইবে")
     const [phoneNumber, setPhoneNumber] = useState("01788888888");
     const [looking, setLooking] = useState("");
     const [showMultiSelectDropDown, setShowMultiSelectDropDown] = useState(false);
@@ -33,15 +43,21 @@ const LandLordForm = ({ navigation }) => {
     const [washRoom, setWashRoom] = useState(1);
     const [barandha, setBarandha] = useState(1);
     const [florNo, setFlorNo] = useState(1);
-    const [selectedPropertyType, setSelectedPropertyType] = useState([]);
+    const [category, setCategory] = useState("");
     const [flatSize, setFlatSize] = useState(1200)
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [location, setLocation] = useState("Dhanmondhi");
+    const [gasBill, setGasBill] = useState("0");
+    const [electricityBill, setElectricityBill] = useState("0");
+    const [waterBill, setWaterBill] = useState("0");
+    const [serviceCharge, setServiceCharge] = useState("0");
     const [isModalVisible, setModalVisible] = useState(false);
     const [imageUrl, setImageUrl] = useState(defaultImg);
     const [isChecked, setIsChecked] = useState(false);
     const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+
+    // console.log(imageUrl);
 
     // function for handle terms and condition 
     const handleCheckboxChange = () => {
@@ -85,13 +101,13 @@ const LandLordForm = ({ navigation }) => {
         setFlorNo(Math.max(florNo - 1, 0)); // Ensure the value doesn't go below 0
     }
     //   function for property type selection 
-    const toggleItemSelection = (item) => {
-        if (selectedPropertyType.includes(item)) {
-            setSelectedPropertyType(selectedPropertyType.filter((selectedItem) => selectedItem !== item));
-        } else {
-            setSelectedPropertyType([...selectedPropertyType, item]);
-        }
-    };
+    // const toggleItemSelection = (item) => {
+    //     if (selectedPropertyType.includes(item)) {
+    //         setSelectedPropertyType(selectedPropertyType.filter((selectedItem) => selectedItem !== item));
+    //     } else {
+    //         setSelectedPropertyType([...selectedPropertyType, item]);
+    //     }
+    // };
 
     // function for open camera 
     const openCameraLib = async () => {
@@ -117,32 +133,69 @@ const LandLordForm = ({ navigation }) => {
         setIsSubmitDisabled(!isValid);
     }, [phoneNumber, rentPrice, flatSize, location, imageUrl, isChecked]);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        const requestData = {
+            title,
+            rentPrice,
+            location,
+            bedRoom,
+            washRoom,
+            barandha,
+            category,
+            phoneNumber,
+            image:imageUrl,
+            flatSize,
+            date,
+            looking,
+            gasBill,
+            electricityBill,
+            waterBill,
+            serviceCharge,
+            others: selectedItems,
+            florNo,
+            user: userData.uid,
+        };
+
+        try {
+            fetch(`https://rental-property-mobile-apps.vercel.app/api/v1/property/new`, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData)
+            })
+                .then(res => res.json())
+                .then(data => console.log(data))
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
 
 
-        const formData = new FormData();
 
-        formData.append('phoneNumber', phoneNumber);
-        formData.append('looking', looking);
-        formData.append('rentPrice', rentPrice);
-        formData.append('bedRoom', bedRoom);
-        formData.append('washRoom', washRoom);
-        formData.append('barandha', barandha);
-        formData.append('florNo', florNo);
-        formData.append('selectedPropertyType', selectedPropertyType);
-        formData.append('flatSize', flatSize);
-        formData.append('date', date);
-        formData.append('location', location);
-        formData.append('imageUrl', {
-            uri: imageUrl,
-            type: 'image/jpeg',
-            name: 'image.jpg',
-        });
-        console.log(formData);
 
-    }
+    useEffect(() => {
 
+        if (error) {
+            Toast.error(error);
+            console.log(error);
+            dispatch(clearErrors());
+        }
+        if (success) {
+            Toast.success("You have post new Property")
+        }
+        dispatch({ type: NEW_PROPERTY_RESET });
+
+    }, [error, success, dispatch])
+
+    // console.log(category);
+    // console.log(selectedItems);
+    // console.log(typeof(selectedItems));
+    // console.log(typeof (looking));
+    // console.log(userData.uid);
     return (
         <>
             <AppHeader
@@ -163,33 +216,27 @@ const LandLordForm = ({ navigation }) => {
                         <View style={defaultStyle.rowView}>
                             {propertyType &&
                                 propertyType.map((item, index) => (
-                                    <TouchableOpacity
+                                    <PaperBtn
                                         key={index}
-                                        style={[
-                                            styles.touchableOpacity,
-                                            {
-                                                backgroundColor: selectedItems.includes(item) ? 'lightblue' : 'white',
-                                            },
-                                        ]}
-                                        onPress={() => toggleItemSelection(item)}
+                                        style={{
+                                            backgroundColor: colors.color7,
+                                            borderRadius: 100,
+                                            marginTop: 5
+                                        }}
+                                        onPress={() => setCategory(item)}
                                     >
-                                        <Text
-                                            style={[
-                                                styles.text,
-                                                {
-                                                    color: selectedItems.includes(item) ? 'blue' : 'black',
-                                                },
-                                            ]}
-                                        >
-                                            {item}
-                                        </Text>
-                                    </TouchableOpacity>
+                                        {item}
+
+                                    </PaperBtn>
                                 ))}
                         </View>
 
                         <View>
+                            <Text style={styles.rentDetailsTxt}> হেডলাইন যুক্ত করুন * </Text>
                             <TextInput
-
+                                style={{ ...styles.rentDetailsInput, padding: 10 }}
+                                value={title}
+                                onChangeText={setTitle}
                             />
                         </View>
 
@@ -321,26 +368,34 @@ const LandLordForm = ({ navigation }) => {
                                 <Text style={styles.rentDetailsTxt}>বিদ্যুৎ বিল</Text>
                                 <TextInput
                                     style={{ ...styles.rentDetailsInput }}
+                                    value={electricityBill}
+                                    onChangeText={setElectricityBill}
                                 />
                             </View>
                             <View style={{ width: '40%' }}>
                                 <Text style={styles.rentDetailsTxt}>গ্যাস বিল</Text>
                                 <TextInput
                                     style={{ ...styles.rentDetailsInput }}
+                                    value={gasBill}
+                                    onChangeText={setGasBill}
                                 />
                             </View>
                         </View>
                         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <View style={{ width: '40%' }}>
-                                <Text style={styles.rentDetailsTxt}>বিদ্যুৎ বিল</Text>
+                                <Text style={styles.rentDetailsTxt}>পানি  বিল</Text>
                                 <TextInput
                                     style={{ ...styles.rentDetailsInput }}
+                                    value={waterBill}
+                                    onChangeText={setWaterBill}
                                 />
                             </View>
                             <View style={{ width: '40%' }}>
-                                <Text style={styles.rentDetailsTxt}>গ্যাস বিল</Text>
+                                <Text style={styles.rentDetailsTxt}>সার্ভিস চার্জ</Text>
                                 <TextInput
                                     style={{ ...styles.rentDetailsInput }}
+                                    value={serviceCharge}
+                                    onChangeText={setServiceCharge}
                                 />
                             </View>
                         </View>

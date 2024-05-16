@@ -10,10 +10,11 @@ const PropertyCard = ({ navigate, item, id }) => {
         <TouchableOpacity
             activeOpacity={1}
             onPress={() => navigate.navigate('propertyDetails', { id })}
+            style={{ width: '90%' }}
         >
-            <View style={{ backgroundColor: colors.color3, borderRadius: 5, display: 'flex', justifyContent: "center", alignItems: 'center', width: '100%' }}>
-                <View>
-                    <Image source={item?.img} style={styles.img} />
+            <View style={{ backgroundColor: colors.color3, borderRadius: 10 }}>
+                <View style={{ width: '100%' }}>
+                    <Image source={{ uri: item?.image }} style={styles.img} />
                 </View>
                 <View style={{ marginTop: 5, width: '100%' }}>
                     <Text style={styles.title}> {item?.title} </Text>
@@ -21,28 +22,28 @@ const PropertyCard = ({ navigate, item, id }) => {
                         <View style={{ display: 'flex', width: "50%" }}>
                             <View style={styles.content}>
                                 <IonIcon name="bed-outline" size={20} color={colors.color1} />
-                                <Text style={styles.textUtils}> {item?.bedRoom} </Text>
+                                <Text style={styles.textUtils}>বেডরুম: {item?.bedRoom} </Text>
                             </View>
                             <View style={styles.content}>
                                 <IonIcon name="file-tray-outline" size={20} color={colors.color1} />
-                                <Text style={styles.textUtils}> {item?.washRoom} </Text>
+                                <Text style={styles.textUtils}>বাথরুম: {item?.washRoom} </Text>
                             </View>
                         </View>
                         <View style={{ display: 'flex', width: "30%" }}>
                             <View style={styles.content}>
                                 <IonIcon name="checkmark-circle-outline" size={20} color={colors.color1} />
-                                <Text style={styles.textUtils}> {item?.diningRoom} </Text>
+                                <Text style={styles.textUtils}>ডাইনিং স্পেস: {item?.diningRoom} </Text>
                             </View>
                             <View style={styles.content}>
                                 <IonIcon name="checkmark-circle-outline" size={20} color={colors.color1} />
-                                <Text style={styles.textUtils}> {item?.balcony} </Text>
+                                <Text style={styles.textUtils}>বারান্দা: {item?.barandha} </Text>
                             </View>
                         </View>
                     </View>
                     <View style={{ ...styles.content, paddingVertical: 10, gap: 5 }}>
                         <IonIcon name="location-outline" size={20} color={colors.color1} />
                         <Text style={styles.textUtils}> {item?.location} </Text>
-                        <Text style={styles.textUtils}> ভাড়া:$ {item?.price}  </Text>
+                        <Text style={styles.textUtils}> ভাড়া:$ {item?.rentPrice}  </Text>
                     </View>
                 </View>
             </View>
@@ -56,7 +57,8 @@ const styles = StyleSheet.create({
     content: {
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        gap: 5,
     },
     input: {
         backgroundColor: colors.color3,
@@ -76,7 +78,9 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     img: {
-
+        width: '100%',
+        height: 200,
+        borderRadius: 10,
     },
     title: {
         color: colors.color1,
@@ -90,5 +94,4 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 10
     },
-
 })

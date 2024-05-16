@@ -21,7 +21,7 @@ export const propertyReducer = (state = { properties: [] }, action) => {
         case ALL_PROPERTY_SUCCESS:
             return {
                 loading: false,
-                properties: action.payload.properties,
+                properties: action.payload,
                 propertyCount: action.payload.propertyCount,
                 filteredProperty: action.payload.filteredProperty,
             }
@@ -80,7 +80,7 @@ export const newPropertyReducer = (state = { property: {} }, action) => {
         case NEW_PROPERTY_SUCCESS:
             return {
                 loading: false,
-                success: action.payload.success,
+                success: action.payload,
                 property: action.payload,
             }
         case NEW_PROPERTY_RESET:
