@@ -12,6 +12,7 @@ import Slider from '@react-native-community/slider';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearErrors, getAllProperty } from '../redux/action/propertyAction';
 import { Toast } from 'toastify-react-native';
+import Loader from '../components/Loader';
 
 const categories = [
     "Bachelor",
@@ -66,111 +67,119 @@ const Properties = ({ navigation }) => {
                 optionalFunction={() => console.log("optionalBtnPress")}
             />
 
-            <View style={{ backgroundColor: colors.color1, height: 70, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                <TextInput
-                    placeholder='Search properties...'
-                    style={{
-                        backgroundColor: colors.color3,
-                        color: colors.color1,
-                        padding: 10,
-                        borderRadius: 10,
-                        height: 50,
-                        margin: 10,
-                        width: '93%',
-                    }}
-                />
-                <IonIcon name="search-outline" size={25} color={colors.color1} style={{ marginLeft: -50 }} />
-            </View>
-            <View style={{ backgroundColor: colors.color7, paddingBottom: 10 }}>
-                <ScrollView
-                    horizontal
-                    contentContainerStyle={{
-                        paddingTop: 10,
-                        alignItems: "center",
-                        gap: 10,
-                        backgroundColor: colors.color7,
-                        paddingBottom: 5
-                    }}
-                    showsHorizontalScrollIndicator={false}
-                >
-                    {
-                        categories &&
-                        categories?.map((item, index) => (
-                            <Button
-                                key={index}
+            {
+                loading ?
+                    (<Loader />)
+                    :
+                    (<>
+                        <View style={{ backgroundColor: colors.color1, height: 70, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                            <TextInput
+                                placeholder='Search properties...'
                                 style={{
                                     backgroundColor: colors.color3,
-                                    borderRadius: 100,
-                                    margin: 5,
-                                    height: 40,
+                                    color: colors.color1,
+                                    padding: 10,
+                                    borderRadius: 10,
+                                    height: 50,
+                                    margin: 10,
+                                    width: '93%',
                                 }}
-                                onPress={() => setCategory(item)}
+                            />
+                            <IonIcon name="search-outline" size={25} color={colors.color1} style={{ marginLeft: -50 }} />
+                        </View >
+                        <View style={{ backgroundColor: colors.color7, paddingBottom: 10 }}>
+                            <ScrollView
+                                horizontal
+                                contentContainerStyle={{
+                                    paddingTop: 10,
+                                    alignItems: "center",
+                                    gap: 10,
+                                    backgroundColor: colors.color7,
+                                    paddingBottom: 5
+                                }}
+                                showsHorizontalScrollIndicator={false}
                             >
-                                <Text style={styles.txt}> {item} </Text>
-                            </Button>
-                        ))
-                    }
-                    <Button
-                        style={{
-                            backgroundColor: colors.color3,
-                            borderRadius: 100,
-                            margin: 5,
-                            height: 40,
-                        }}
-                    >
-                        <Text style={styles.txt}> Clear All </Text>
-                    </Button>
+                                {
+                                    categories &&
+                                    categories?.map((item, index) => (
+                                        <Button
+                                            key={index}
+                                            style={{
+                                                backgroundColor: colors.color3,
+                                                borderRadius: 100,
+                                                margin: 5,
+                                                height: 40,
+                                            }}
+                                            onPress={() => setCategory(item)}
+                                        >
+                                            <Text style={styles.txt}> {item} </Text>
+                                        </Button>
+                                    ))
+                                }
+                                <Button
+                                    style={{
+                                        backgroundColor: colors.color3,
+                                        borderRadius: 100,
+                                        margin: 5,
+                                        height: 40,
+                                    }}
+                                >
+                                    <Text style={styles.txt}> Clear All </Text>
+                                </Button>
 
-                </ScrollView>
+                            </ScrollView>
 
-                <View
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        backgroundColor: colors.color7,
-                        width: '90%',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                    }}
-                >
+                            <View
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    backgroundColor: colors.color7,
+                                    width: '90%',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                }}
+                            >
 
-                    <Slider
-                        style={{ width: 300, height: 40 }}
-                        minimumValue={5000}
-                        maximumValue={50000}
-                        minimumTrackTintColor="#000"
-                        maximumTrackTintColor="#000000"
-                        onValueChange={handlePrice}
-                        step={1000}
-                        value={price}
-                    />
+                                <Slider
+                                    style={{ width: 300, height: 40 }}
+                                    minimumValue={5000}
+                                    maximumValue={50000}
+                                    minimumTrackTintColor="#000"
+                                    maximumTrackTintColor="#000000"
+                                    onValueChange={handlePrice}
+                                    step={1000}
+                                    value={price}
+                                />
 
-                    <Button
-                        style={{
-                            backgroundColor: colors.color3,
-                            borderRadius: 100,
-                            margin: 5,
-                            height: 40,
-                        }}
-                    >
-                        <Text> Clear All </Text>
-                    </Button>
-                </View>
-            </View>
+                                <Button
+                                    style={{
+                                        backgroundColor: colors.color3,
+                                        borderRadius: 100,
+                                        margin: 5,
+                                        height: 40,
+                                    }}
+                                >
+                                    <Text> Clear All </Text>
+                                </Button>
+                            </View>
+                        </View>
 
-            <ScrollView contentContainerStyle={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 15 }} showsVerticalScrollIndicator={false}>
-                {
-                    properties &&
-                    properties.map((item) => (
-                        <PropertyCard
-                            key={item?._id}
-                            item={item}
-                            id={item?._id}
-                            navigate={navigate}
-                        />
-                    ))
-                }
-            </ScrollView>
+                        <ScrollView contentContainerStyle={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 15 }} showsVerticalScrollIndicator={false}>
+                            {
+                                properties &&
+                                properties.map((item) => (
+                                    <PropertyCard
+                                        key={item?._id}
+                                        item={item}
+                                        id={item?._id}
+                                        navigate={navigate}
+                                    />
+                                ))
+                            }
+                        </ScrollView>
+                    </>)
+            }
+
         </>
     )
 }

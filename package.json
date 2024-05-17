@@ -24,6 +24,7 @@
     "mime": "^4.0.3",
     "react": "18.2.0",
     "react-native": "0.73.5",
+    "react-native-animated-spinkit": "^1.5.2",
     "react-native-date-picker": "^5.0.2",
     "react-native-extra-dimensions-android": "^1.2.5",
     "react-native-floating-action": "^1.22.0",

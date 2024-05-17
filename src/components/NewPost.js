@@ -10,6 +10,7 @@ import IonIcon from "react-native-vector-icons/Ionicons";
 import { useDispatch, useSelector } from 'react-redux';
 import { Toast } from 'toastify-react-native';
 import { clearErrors, getAllProperty } from '../redux/action/propertyAction';
+import Loader from './Loader';
 
 export const demoData = [
     {
@@ -68,43 +69,48 @@ const NewPost = () => {
     return (
         <View>
             <Text style={styles.txt}>নতুন পোস্ট সমূহ</Text>
-            <View>
-                <View style={{ marginTop: 10, gap: 5 }}>
-                    {
-                        newProperty &&
-                        newProperty.map((item) => (
-                            <ScrollView horizontal key={item?._id}
-                                contentContainerStyle={{
-                                    alignItems: "center",
-                                    gap: 10,
-                                    backgroundColor: colors.color3,
-                                    padding: 10,
-                                    borderBottomLeftRadius: 10,
-                                    borderBottomRightRadius: 10,
-                                    height: 120,
-                                    width: 'auto'
-                                }}
-                                showsHorizontalScrollIndicator={false}
-                            >
-                                <Image source={{ uri: item?.image }} style={{ width: 150, height: 100, borderRadius: 10 }} />
-                                <View>
-                                    <Title style={{ fontSize: 11 }}> {item?.title} </Title>
-                                    <View style={{ display: "flex", alignItems: "center", gap: 5, flexDirection: "row" }}>
-                                        <IonIcon name="storefront-outline" size={15} color={colors.color1} />
-                                        <Text style={{ fontSize: 10, color: colors.color1 }}> {item?.bedRoom}বেডরুম,{item?.washRoom} বাথরুম , {item?.barandha}বারান্দা </Text>
-                                    </View>
-                                    <View style={{ display: "flex", alignItems: "center", gap: 5, flexDirection: "row" }}>
-                                        <Text style={{ fontSize: 11, color: colors.color1 }}>ভাড়া: ${item?.rentPrice} </Text>
-                                        <IonIcon name="location-outline" size={15} color={colors.color1} />
-                                        <Text style={{ fontSize: 11, color: colors.color1 }}> {item?.location} </Text>
-                                    </View>
-                                </View>
-                            </ScrollView>
-                        ))
-                    }
-                </View>
-            </View>
-        </View>
+            {
+                loading ?
+                    (<Loader />)
+                    :
+                    (<View>
+                        <View style={{ marginTop: 10, gap: 5 }}>
+                            {
+                                newProperty &&
+                                newProperty.map((item) => (
+                                    <ScrollView horizontal key={item?._id}
+                                        contentContainerStyle={{
+                                            alignItems: "center",
+                                            gap: 10,
+                                            backgroundColor: colors.color3,
+                                            padding: 10,
+                                            borderBottomLeftRadius: 10,
+                                            borderBottomRightRadius: 10,
+                                            height: 120,
+                                            width: 'auto'
+                                        }}
+                                        showsHorizontalScrollIndicator={false}
+                                    >
+                                        <Image source={{ uri: item?.image }} style={{ width: 150, height: 100, borderRadius: 10 }} />
+                                        <View>
+                                            <Title style={{ fontSize: 11 }}> {item?.title} </Title>
+                                            <View style={{ display: "flex", alignItems: "center", gap: 5, flexDirection: "row" }}>
+                                                <IonIcon name="storefront-outline" size={15} color={colors.color1} />
+                                                <Text style={{ fontSize: 10, color: colors.color1 }}> {item?.bedRoom}বেডরুম,{item?.washRoom} বাথরুম , {item?.barandha}বারান্দা </Text>
+                                            </View>
+                                            <View style={{ display: "flex", alignItems: "center", gap: 5, flexDirection: "row" }}>
+                                                <Text style={{ fontSize: 11, color: colors.color1 }}>ভাড়া: ${item?.rentPrice} </Text>
+                                                <IonIcon name="location-outline" size={15} color={colors.color1} />
+                                                <Text style={{ fontSize: 11, color: colors.color1 }}> {item?.location} </Text>
+                                            </View>
+                                        </View>
+                                    </ScrollView>
+                                ))
+                            }
+                        </View>
+                    </View >)
+            }
+        </View >
     )
 }
 

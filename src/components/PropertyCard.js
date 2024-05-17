@@ -13,7 +13,7 @@ const PropertyCard = ({ navigate, item, id }) => {
             style={{ width: '90%' }}
         >
             <View style={{ backgroundColor: colors.color3, borderRadius: 10 }}>
-                <View style={{ width: '100%' }}>
+                <View style={{ width: '100%'}}>
                     <Image source={{ uri: item?.image }} style={styles.img} />
                 </View>
                 <View style={{ marginTop: 5, width: '100%' }}>

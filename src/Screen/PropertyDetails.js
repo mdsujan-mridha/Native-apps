@@ -1,24 +1,49 @@
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react';
-import propertyImg from "../../Assets/property.png";
+import { Image, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect } from 'react';
 import AppHeader from '../components/AppHeader';
 import { colors, defaultStyle } from '../utils/styles';
 import IonIcon from "react-native-vector-icons/Ionicons";
+import { useDispatch, useSelector } from 'react-redux';
+import { Toast } from 'toastify-react-native';
+import { clearErrors, getPropertyDetails } from '../redux/action/propertyAction';
 
-const PropertyDetails = ({ navigation }) => {
+const PropertyDetails = ({ navigation, route: { params } }) => {
+  const dispatch = useDispatch();
+  const { property, error, success } = useSelector((state) => state.propertyDetails);
+  // console.log(params.id);
+  const id = params?.id
 
-  const property = {
-    _id: 1,
-    img: propertyImg,
-    title: "আগামি ১লা জানুয়ারি মাস থেকে ধানমন্ডিতে ফ্লাট ভাড়া দেওয়া হবে।",
-    bedRoom: "২ বেড রুম",
-    washRoom: "২ বাথরুম",
-    diningRoom: "ডাইনিং",
-    balcony: "২ ব্যলকুনি",
-    price: "20000",
-    location: "ধানমন্ডি ঢাকা-১২০৫,বাংলাদশে",
+  useEffect(() => {
+
+    if (error) {
+      Toast.error(error);
+      dispatch(clearErrors())
+    }
+    if (success) {
+      Toast.success("Property Details");
+    }
+    dispatch(getPropertyDetails(id))
+
+  }, [dispatch, error, success, id])
+
+  // console.log(property);
+  // console.log(property.image);
+  // const handle linking 
+  const handleLocationClick = () => {
+
+    const googleLocation = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property?.location)}`
+
+    Linking.openURL(googleLocation);
+
+  };
+
+  // handle phone number
+  const handlePhoneClick = () => {
+    const phone = `tel:${property.phone}`
+    Linking.openURL(phone);
   }
 
+  
   return (
     <View>
       <AppHeader
@@ -30,38 +55,39 @@ const PropertyDetails = ({ navigation }) => {
         right="more-vertical"
         rightFunction={() => console.log("right")}
       />
-      <ScrollView style={{ marginBottom: 20 }}>
+      <ScrollView style={{ marginBottom: 20, marginTop: 10 }}>
         <View style={styles.container}>
-          <Image source={propertyImg} style={styles.propertyImage} />
+          <Image source={{ uri: property?.image }} style={styles.propertyImage} />
+          
           <View style={styles.content}>
             <Text style={{ color: colors.color1, fontSize: 17, fontWeight: 900 }}> {property.title} </Text>
-            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+            <TouchableOpacity style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }} onPress={handleLocationClick}>
               <IonIcon name="location-outline" size={20} color={colors.color1} />
               <Text style={{ color: colors.color1 }}> {property.location} </Text>
-            </View>
+            </TouchableOpacity>
             <View style={styles.details}>
               <View>
                 <View style={styles.detailsContent}>
                   <IonIcon name="checkmark-circle-outline" size={15} color={colors.color1} />
-                  <Text style={{ color: colors.color1 }}>{property.bedRoom} </Text>
+                  <Text style={{ color: colors.color1 }}>বেডরুম:{property?.bedRoom} </Text>
                 </View>
                 <View style={styles.detailsContent}>
                   <IonIcon name="checkmark-circle-outline" size={15} color={colors.color1} />
-                  <Text style={{ color: colors.color1 }}>{property.washRoom} </Text>
+                  <Text style={{ color: colors.color1 }}>বাথরুম:{property?.washRoom} </Text>
                 </View>
                 <View style={styles.detailsContent}>
                   <IonIcon name="pricetags-outline" size={15} color={colors.color1} />
-                  <Text style={{ color: colors.color1 }}> ভাড়া: {property.price} প্রতি মাস </Text>
+                  <Text style={{ color: colors.color1 }}> ভাড়া: {property?.rentPrice} প্রতি মাস </Text>
                 </View>
               </View>
               <View>
                 <View style={styles.detailsContent}>
                   <IonIcon name="checkmark-circle-outline" size={15} color={colors.color1} />
-                  <Text style={{ color: colors.color1 }}>{property.balcony} </Text>
+                  <Text style={{ color: colors.color1 }}>বারান্দা{property?.barandha} </Text>
                 </View>
                 <View style={styles.detailsContent}>
                   <IonIcon name="checkmark-circle-outline" size={15} color={colors.color1} />
-                  <Text style={{ color: colors.color1 }}>{property.diningRoom} </Text>
+                  <Text style={{ color: colors.color1 }}>{property?.diningRoom} ডাইনিং </Text>
                 </View>
               </View>
             </View>
@@ -70,21 +96,21 @@ const PropertyDetails = ({ navigation }) => {
               <View>
                 <View style={styles.detailsContent}>
                   <IonIcon name="flash-outline" size={15} color={colors.color1} />
-                  <Text style={{ color: colors.color1 }}> ৮০ টাকা বিদ্যুৎ বিল </Text>
+                  <Text style={{ color: colors.color1 }}> {property?.electricityBill} টাকা বিদ্যুৎ বিল </Text>
                 </View>
                 <View style={styles.detailsContent}>
                   <IonIcon name="flame-outline" size={15} color={colors.color1} />
-                  <Text style={{ color: colors.color1 }}> ১২০ টাকা গ্যাস বিল </Text>
+                  <Text style={{ color: colors.color1 }}> {property?.gasBill} টাকা গ্যাস বিল </Text>
                 </View>
               </View>
               <View>
                 <View style={styles.detailsContent}>
                   <IonIcon name="water-outline" size={15} color={colors.color1} />
-                  <Text style={{ color: colors.color1 }}> ০ টাকা পানি বিল </Text>
+                  <Text style={{ color: colors.color1 }}> {property.waterBill} টাকা পানি বিল </Text>
                 </View>
                 <View style={styles.detailsContent}>
                   <IonIcon name="browsers-outline" size={15} color={colors.color1} />
-                  <Text style={{ color: colors.color1 }}> ০ টাকা সার্ভিস চার্জ </Text>
+                  <Text style={{ color: colors.color1 }}> {property?.serviceCharge} টাকা সার্ভিস চার্জ </Text>
                 </View>
               </View>
             </View>
@@ -128,10 +154,10 @@ const PropertyDetails = ({ navigation }) => {
             </ScrollView>
             <View>
               <Text style={{ color: colors.color1, fontWeight: 900 }}> Contact for booking: </Text>
-              <View style={{ ...defaultStyle.rowView, gap: 5, marginTop: 5 }}>
+              <TouchableOpacity style={{ ...defaultStyle.rowView, gap: 5, marginTop: 5 }} onPress={handlePhoneClick}>
                 <IonIcon name="call-outline" size={15} color={colors.color1} />
-                <Text style={{ color: colors.color1 }}> +8801615951638 </Text>
-              </View>
+                <Text style={{ color: colors.color1 }}> {property?.phoneNumber} </Text>
+              </TouchableOpacity>
             </View>
             <View>
               <Text> বিজ্ঞাপণ দাতা </Text>
@@ -152,13 +178,13 @@ const PropertyDetails = ({ navigation }) => {
                 </Text>
               </View>
             </View>
-              <View style={{ ...defaultStyle.rowView, height: 120, backgroundColor: "#f2d7d5", borderRadius: 9 }}>
-                <IonIcon name="alert-circle-outline" size={25} color={colors.color1} style={{ paddingLeft: 10 }} />
-                <View>
-                  <Text style={{ color: colors.color1 }}> বিজ্ঞাপনে কোন প্রকার অসামজ্ঞস্য তথ্য 
+            <View style={{ ...defaultStyle.rowView, height: 120, backgroundColor: "#f2d7d5", borderRadius: 9, width: '100%' }}>
+              <IonIcon name="alert-circle-outline" size={25} color={colors.color1} style={{ paddingLeft: 10 }} />
+              <View>
+                <Text style={{ color: colors.color1, width: "80%" }}> বিজ্ঞাপনে কোন প্রকার অসামজ্ঞস্য তথ্য
                   পেলে এখনই রিপোর্ট করুণ </Text>
-                </View>
               </View>
+            </View>
           </View>
         </View>
       </ScrollView >
