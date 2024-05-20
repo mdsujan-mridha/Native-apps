@@ -8,11 +8,12 @@ import { addToWishlist } from '../redux/action/wishlistAction';
 
 const PropertyCard = ({ navigate, item, id }) => {
     const dispatch = useDispatch();
-    
+
 
 
     const handleAddToWishlist = () => {
         dispatch(addToWishlist(item));
+        // console.log(result);
     }
 
 
@@ -26,7 +27,7 @@ const PropertyCard = ({ navigate, item, id }) => {
                 <View style={styles.imageContainer}>
                     <Image source={{ uri: item?.image }} style={styles.img} />
                     <TouchableOpacity style={styles.wishlistButton} onPress={handleAddToWishlist}>
-                        <IonIcon name="heart-outline" size={25} color={colors.color1} />
+                        <IonIcon name="heart-outline" size={25} color={colors.color3} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.detailsContainer}>
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 10,
         right: 10,
-        backgroundColor: colors.color2,
+        backgroundColor: colors.color1,
         borderRadius: 20,
         padding: 5,
         justifyContent: 'center',

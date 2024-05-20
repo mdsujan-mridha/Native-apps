@@ -4,22 +4,46 @@ import {
     LOAD_WISHLIST,
     REMOVE_FROM_WISHLIST
 } from "../constant/WishlistConstant";
-
+import { Toast } from "toastify-react-native";
 
 // Add to wishlist action
 export const addToWishlist = (item) => async (dispatch) => {
     try {
-        const wishlist = await AsyncStorage?.getItem('wishlist');
-        let wishlistItems = wishlist ? JSON.parse(wishlist) : [];
-        let newWishlist = [...wishlistItems, item];
+        const wishlist = await AsyncStorage.getItem('wishlist');
+        let wishlistItems = [];
 
-        await AsyncStorage?.setItem('wishlist', JSON.stringify(newWishlist));
+        if (wishlist) {
+            try {
+                wishlistItems = JSON.parse(wishlist);
+                if (!Array.isArray(wishlistItems)) {
+                    wishlistItems = [];
+                }
+            } catch (parseError) {
+                console.error("Failed to parse wishlist JSON", parseError);
+                wishlistItems = [];
+            }
+        }
 
-        dispatch({ type: ADD_TO_WISHLIST, payload: item });
+        // console.log('Current wishlist items:', wishlistItems);
+
+        // Check if the item already exists in the wishlist
+        const itemExists = wishlistItems.some(wishlistItem => wishlistItem?._id === item?._id);
+
+        if (!itemExists) {
+            let newWishlist = [...wishlistItems, item];
+            await AsyncStorage.setItem('wishlist', JSON.stringify(newWishlist));
+
+            // console.log('Updated wishlist items:', newWishlist);
+
+            dispatch({ type: ADD_TO_WISHLIST, payload: item });
+            Toast.success("Item added");
+        } else {
+            Toast.warn('Item already exists in wishlist');
+        }
     } catch (error) {
-        console.error("Failed to add wishlist", error);
+        Toast.error("Failed to add wishlist", error);
     }
-}
+};
 
 // Remove from wishlist action
 export const removeFromWishlist = (itemId) => async (dispatch) => {
