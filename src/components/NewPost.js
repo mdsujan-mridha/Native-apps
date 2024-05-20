@@ -12,48 +12,12 @@ import { Toast } from 'toastify-react-native';
 import { clearErrors, getAllProperty } from '../redux/action/propertyAction';
 import Loader from './Loader';
 
-export const demoData = [
-    {
-        _id: 1,
-        img: propertyImg,
-        title: "আগামি ১লা জানুয়ারি মাস থেকে ধানমন্ডিতে ফ্লাট ভাড়া দেওয়া হবে।",
-        bedRoom: "২ বেড রুম",
-        washRoom: "২ বাথরুম",
-        diningRoom: "ডাইনিং",
-        balcony: "২ ব্যলকুনি",
-        price: "20000",
-        location: "ধানমন্ডি ঢাকা-১২০৫,বাংলাদশে"
-    },
-    {
-        _id: 2,
-        img: propertyImg,
-        title: "আগামি ১লা জানুয়ারি মাস থেকে ধানমন্ডিতে ফ্লাট ভাড়া দেওয়া হবে।",
-        bedRoom: "২ বেড রুম",
-        washRoom: "২ বাথরুম",
-        diningRoom: "ডাইনিং",
-        balcony: "২ ব্যলকুনি",
-        price: "20000",
-        location: "ধানমন্ডি ঢাকা-১২০৫,বাংলাদশে"
-    },
-    {
-        _id: 3,
-        img: propertyImg,
-        title: "আগামি ১লা জানুয়ারি মাস থেকে ধানমন্ডিতে ফ্লাট ভাড়া দেওয়া হবে।",
-        bedRoom: "২ বেড রুম",
-        washRoom: "২ বাথরুম",
-        diningRoom: "ডাইনিং",
-        balcony: "২ ব্যলকুনি",
-        price: "20000",
-        location: "ধানমন্ডি ঢাকা-১২০৫,বাংলাদশে"
-    }
-
-]
 
 
 const NewPost = () => {
     const dispatch = useDispatch();
     const { properties, loading, error } = useSelector((state) => state.properties);
-    const newProperty = properties.slice(8, 11);
+    const newProperty = properties.slice(3, 6);
     // console.log(newProperty);
 
     useEffect(() => {
@@ -73,7 +37,7 @@ const NewPost = () => {
                 loading ?
                     (<Loader />)
                     :
-                    (<View>
+                    (
                         <View style={{ marginTop: 10, gap: 5 }}>
                             {
                                 newProperty &&
@@ -108,7 +72,7 @@ const NewPost = () => {
                                 ))
                             }
                         </View>
-                    </View >)
+                    )
             }
         </View >
     )

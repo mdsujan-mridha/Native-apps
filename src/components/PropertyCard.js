@@ -1,25 +1,38 @@
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect } from 'react';
+import IonIcon from 'react-native-vector-icons/Ionicons';
+import { colors } from '../utils/styles';
+import { useDispatch } from 'react-redux';
+import { addToWishlist } from '../redux/action/wishlistAction';
 
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import { colors } from '../utils/styles'
-import IonIcon from "react-native-vector-icons/Ionicons";
 
 const PropertyCard = ({ navigate, item, id }) => {
+    const dispatch = useDispatch();
+    
+
+
+    const handleAddToWishlist = () => {
+        dispatch(addToWishlist(item));
+    }
+
 
     return (
         <TouchableOpacity
             activeOpacity={1}
             onPress={() => navigate.navigate('propertyDetails', { id })}
-            style={{ width: '90%' }}
+            style={{ width: '90%', marginVertical: 10 }}
         >
-            <View style={{ backgroundColor: colors.color3, borderRadius: 10 }}>
-                <View style={{ width: '100%'}}>
+            <View style={styles.card}>
+                <View style={styles.imageContainer}>
                     <Image source={{ uri: item?.image }} style={styles.img} />
+                    <TouchableOpacity style={styles.wishlistButton} onPress={handleAddToWishlist}>
+                        <IonIcon name="heart-outline" size={25} color={colors.color1} />
+                    </TouchableOpacity>
                 </View>
-                <View style={{ marginTop: 5, width: '100%' }}>
+                <View style={styles.detailsContainer}>
                     <Text style={styles.title}> {item?.title} </Text>
-                    <View style={{ ...styles.content, justifyContent: "space-between", paddingHorizontal: 5, paddingVertical: 10 }}>
-                        <View style={{ display: 'flex', width: "50%" }}>
+                    <View style={styles.infoContainer}>
+                        <View style={styles.infoSection}>
                             <View style={styles.content}>
                                 <IonIcon name="bed-outline" size={20} color={colors.color1} />
                                 <Text style={styles.textUtils}>বেডরুম: {item?.bedRoom} </Text>
@@ -29,7 +42,7 @@ const PropertyCard = ({ navigate, item, id }) => {
                                 <Text style={styles.textUtils}>বাথরুম: {item?.washRoom} </Text>
                             </View>
                         </View>
-                        <View style={{ display: 'flex', width: "30%" }}>
+                        <View style={styles.infoSection}>
                             <View style={styles.content}>
                                 <IonIcon name="checkmark-circle-outline" size={20} color={colors.color1} />
                                 <Text style={styles.textUtils}>ডাইনিং স্পেস: {item?.diningRoom} </Text>
@@ -40,58 +53,81 @@ const PropertyCard = ({ navigate, item, id }) => {
                             </View>
                         </View>
                     </View>
-                    <View style={{ ...styles.content, paddingVertical: 10, gap: 5 }}>
+                    <View style={styles.locationContainer}>
                         <IonIcon name="location-outline" size={20} color={colors.color1} />
                         <Text style={styles.textUtils}> {item?.location} </Text>
-                        <Text style={styles.textUtils}> ভাড়া:$ {item?.rentPrice}  </Text>
+                        <Text style={styles.textUtils}> ভাড়া: $ {item?.rentPrice} </Text>
                     </View>
                 </View>
             </View>
         </TouchableOpacity>
-    )
-}
+    );
+};
 
-export default PropertyCard
+export default PropertyCard;
 
 const styles = StyleSheet.create({
-    content: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 5,
-    },
-    input: {
+    card: {
         backgroundColor: colors.color3,
         borderRadius: 10,
-        height: 36,
-        paddingTop: 5,
-        paddingLeft: 10,
-        width: '15%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 10
+        position: 'relative',
+        overflow: 'hidden',
     },
-    txt: {
-        color: colors.color1,
-        fontSize: 11,
-        fontWeight: 'bold',
+    imageContainer: {
+        width: '100%',
+        position: 'relative',
     },
     img: {
         width: '100%',
         height: 200,
-        borderRadius: 10,
+    },
+    detailsContainer: {
+        marginTop: 5,
+        width: '100%',
+        paddingHorizontal: 10,
+        paddingVertical: 10,
     },
     title: {
         color: colors.color1,
         fontWeight: 'bold',
-        fontSize: 11,
+        fontSize: 14,
         textAlign: 'justify',
-        paddingHorizontal: 2
+    },
+    infoContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 5,
+        paddingVertical: 10,
+    },
+    infoSection: {
+        display: 'flex',
+        width: '50%',
+    },
+    content: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 5,
     },
     textUtils: {
         color: colors.color1,
         fontWeight: 'bold',
-        fontSize: 10
+        fontSize: 12,
+        marginLeft: 5,
     },
-})
+    locationContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 10,
+        gap: 5,
+    },
+    wishlistButton: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        backgroundColor: colors.color2,
+        borderRadius: 20,
+        padding: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+});

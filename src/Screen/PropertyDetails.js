@@ -1,17 +1,24 @@
 import { Image, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AppHeader from '../components/AppHeader';
-import { colors, defaultStyle } from '../utils/styles';
+import { colors, defaultImg, defaultStyle } from '../utils/styles';
 import IonIcon from "react-native-vector-icons/Ionicons";
 import { useDispatch, useSelector } from 'react-redux';
 import { Toast } from 'toastify-react-native';
 import { clearErrors, getPropertyDetails } from '../redux/action/propertyAction';
 
+
 const PropertyDetails = ({ navigation, route: { params } }) => {
   const dispatch = useDispatch();
   const { property, error, success } = useSelector((state) => state.propertyDetails);
+  // const { user, error: userError, loading: userLoading } = useSelector((state) => state.userDetails);
+  const [user, setUser] = useState({});
+  const [image, setImage] = useState(defaultImg);
+
   // console.log(params.id);
   const id = params?.id
+  // user id for load user info 
+  const _id = property.user
 
   useEffect(() => {
 
@@ -43,7 +50,17 @@ const PropertyDetails = ({ navigation, route: { params } }) => {
     Linking.openURL(phone);
   }
 
-  
+  // console.log(property.image);
+  useEffect(() => {
+
+    fetch(`https://rental-property-mobile-apps.vercel.app/api/v1/user/${_id}`)
+      .then(res => res.json())
+      .then(data => setUser(data))
+
+
+  }, [_id]);
+  // console.log(user.user.name);
+
   return (
     <View>
       <AppHeader
@@ -57,8 +74,12 @@ const PropertyDetails = ({ navigation, route: { params } }) => {
       />
       <ScrollView style={{ marginBottom: 20, marginTop: 10 }}>
         <View style={styles.container}>
-          <Image source={{ uri: property?.image }} style={styles.propertyImage} />
-          
+          <Image
+            source={{ uri: image }}
+            style={styles.propertyImage}
+            resizeMode="cover"
+          />
+
           <View style={styles.content}>
             <Text style={{ color: colors.color1, fontSize: 17, fontWeight: 900 }}> {property.title} </Text>
             <TouchableOpacity style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }} onPress={handleLocationClick}>
@@ -164,10 +185,9 @@ const PropertyDetails = ({ navigation, route: { params } }) => {
               <View style={{ ...defaultStyle.rowView, height: 120, backgroundColor: colors.color7, borderRadius: 9, borderWidth: 1, borderColor: 'gray', gap: 20 }}>
                 <IonIcon name="person-outline" size={50} color={colors.color1} style={{ paddingLeft: 10 }} />
                 <View>
-                  <Text style={{ color: colors.color1 }}> Md Sujan </Text>
-                  <Text style={{ color: colors.color1 }}> +8801615951638 </Text>
+                  <Text style={{ color: colors.color1 }}> {user?.user?.name} </Text>
+                  <Text style={{ color: colors.color1 }}> {user?.user?.phoneNumber} </Text>
                 </View>
-
               </View>
             </View>
             <View>
@@ -232,6 +252,17 @@ const styles = StyleSheet.create({
   },
 
   propertyImage: {
+
+    width: "90%",
+    height: 300,
+    resizeMode: 'contain',
+    backgroundColor: colors.color7,
+    borderRadius: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
 
   }
 

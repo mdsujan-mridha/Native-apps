@@ -20,6 +20,7 @@ import FreePost from './Screen/FreePost';
 import LandLordForm from './Screen/LandLordForm';
 import Services from './utils/Services';
 import { AuthContext } from './utils/AuthContext';
+import Wishlist from './Screen/Wishlist';
 
 
 
@@ -58,6 +59,7 @@ function App() {
                   <Stack.Screen name='propertyDetails' component={PropertyDetails} options={{ headerShown: false }} />
                   <Stack.Screen name='freepost' component={FreePost} options={{ headerShadowVisible: false }} />
                   <Stack.Screen name='Landlord' component={LandLordForm} options={{ headerShown: false }} />
+                  <Stack.Screen name='Wishlist' component={Wishlist} options={{ headerShown: false }} />
                 </Stack.Navigator>
 
                 <Footer />

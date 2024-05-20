@@ -143,7 +143,7 @@ const LandLordForm = ({ navigation }) => {
             barandha,
             category,
             phoneNumber,
-            image:imageUrl,
+            image: imageUrl,
             flatSize,
             date,
             looking,
@@ -196,6 +196,8 @@ const LandLordForm = ({ navigation }) => {
     // console.log(typeof(selectedItems));
     // console.log(typeof (looking));
     // console.log(userData.uid);
+    console.log(imageUrl);
+    
     return (
         <>
             <AppHeader

@@ -18,7 +18,7 @@ const Footer = () => {
                 <IonIcon name="list-outline" size={25} color={colors.color3} />
                 <Text style={styles.txt}> All Adds </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => { navigation.navigate("Home") }} style={styles.content}>
+            <TouchableOpacity onPress={() => { navigation.navigate("Wishlist") }} style={styles.content}>
                 <IonIcon name="heart-outline" size={25} color={colors.color3} />
                 <Text style={styles.txt}> Wishlist </Text>
             </TouchableOpacity>
