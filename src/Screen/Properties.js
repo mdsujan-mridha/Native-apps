@@ -1,5 +1,5 @@
 
-import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import AppHeader from '../components/AppHeader'
 import { colors } from '../utils/styles'
@@ -29,6 +29,7 @@ const Properties = ({ navigation }) => {
     const { properties, loading, error } = useSelector((state) => state.properties)
     const [category, setCategory] = useState("");
     const navigate = useNavigation();
+    const [keyword, setKeyword] = useState("");
     const [price, setPrice] = useState(50000);
 
 
@@ -47,10 +48,19 @@ const Properties = ({ navigation }) => {
             console.log(error);
             dispatch(clearErrors())
         }
-        dispatch(getAllProperty())
+        dispatch(getAllProperty(category, price, keyword))
 
-    }, [dispatch, error])
+    }, [dispatch, error, category, price, keyword])
     // console.log(properties);
+    // console.log(category);
+    // console.log(price);
+    // console.log(keyword);
+    const clearFilters = () => {
+        setCategory("");
+        setPrice(50000);
+        setKeyword("");
+
+    }
 
     return (
         <>
@@ -84,6 +94,8 @@ const Properties = ({ navigation }) => {
                                     margin: 10,
                                     width: '93%',
                                 }}
+                                value={keyword}
+                                onChangeText={setKeyword}
                             />
                             <IonIcon name="search-outline" size={25} color={colors.color1} style={{ marginLeft: -50 }} />
                         </View >
@@ -116,16 +128,17 @@ const Properties = ({ navigation }) => {
                                         </Button>
                                     ))
                                 }
-                                <Button
+                                <TouchableOpacity
                                     style={{
                                         backgroundColor: colors.color3,
                                         borderRadius: 100,
                                         margin: 5,
                                         height: 40,
                                     }}
+                                    onPress={clearFilters}
                                 >
                                     <Text style={styles.txt}> Clear All </Text>
-                                </Button>
+                                </TouchableOpacity>
 
                             </ScrollView>
 
