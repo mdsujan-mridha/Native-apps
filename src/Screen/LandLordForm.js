@@ -166,7 +166,11 @@ const LandLordForm = ({ navigation }) => {
                 body: JSON.stringify(requestData)
             })
                 .then(res => res.json())
-                .then(data => console.log(data))
+                .then(data => {
+                    if (data.success) {
+                        toast.success('Property Added Successfully')
+                    }
+                })
 
         } catch (error) {
             console.error(error);
@@ -197,7 +201,7 @@ const LandLordForm = ({ navigation }) => {
     // console.log(typeof (looking));
     // console.log(userData.uid);
     console.log(imageUrl);
-    
+
     return (
         <>
             <AppHeader

@@ -18,64 +18,58 @@ import Register from './Screen/Register';
 import PropertyDetails from './Screen/PropertyDetails';
 import FreePost from './Screen/FreePost';
 import LandLordForm from './Screen/LandLordForm';
-import Services from './utils/Services';
-import { AuthContext } from './utils/AuthContext';
+
 import Wishlist from './Screen/Wishlist';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadUser } from './redux/action/userAction';
 
 
 
 const Stack = createNativeStackNavigator();
 
 function App() {
+  const dispatch = useDispatch();
+  const { isAuthenticated, user } = useSelector((state) => state.user);
 
-  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
 
-    Services.getUserAuth().then(res => {
+    dispatch(loadUser())
 
-      if (res) {
-        setUserData(res);
-      } else {
-        // Handle case when user data is not available in storage
-        setUserData(null)
-      }
-    })
+  }, [dispatch])
 
-  }, [])
-
+  // console.log("From app screen", user);
 
   return (
     <>
-      <AuthContext.Provider value={{ userData, setUserData }}>
-        <NavigationContainer>
 
-          {
-            userData !== null &&
-              userData ? (
-              <>
-                <Stack.Navigator screenOptions={{ headerShown: false }}>
-                  <Stack.Screen name="App" component={AppStack} options={{ headerShown: false }} />
-                  <Stack.Screen name='propertyDetails' component={PropertyDetails} options={{ headerShown: false }} />
-                  <Stack.Screen name='freepost' component={FreePost} options={{ headerShadowVisible: false }} />
-                  <Stack.Screen name='Landlord' component={LandLordForm} options={{ headerShown: false }} />
-                  <Stack.Screen name='Wishlist' component={Wishlist} options={{ headerShown: false }} />
-                </Stack.Navigator>
+      <NavigationContainer>
 
-                <Footer />
-              </>
-            ) : (
-              <Stack.Navigator>
-                <Stack.Screen name='Login' component={Login} options={{ headerShown: false }} />
-                <Stack.Screen name='Register' component={Register} options={{ headerShown: false }} />
-
+        {
+          isAuthenticated ? (
+            <>
+              <Stack.Navigator screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="App" component={AppStack} options={{ headerShown: false }} />
+                <Stack.Screen name='propertyDetails' component={PropertyDetails} options={{ headerShown: false }} />
+                <Stack.Screen name='freepost' component={FreePost} options={{ headerShadowVisible: false }} />
+                <Stack.Screen name='Landlord' component={LandLordForm} options={{ headerShown: false }} />
+                <Stack.Screen name='Wishlist' component={Wishlist} options={{ headerShown: false }} />
               </Stack.Navigator>
-            )
-          }
 
-        </NavigationContainer>
-        <ToastManager />
-      </AuthContext.Provider>
+              <Footer />
+            </>
+          ) : (
+            <Stack.Navigator>
+              <Stack.Screen name='Login' component={Login} options={{ headerShown: false }} />
+              <Stack.Screen name='Register' component={Register} options={{ headerShown: false }} />
+
+            </Stack.Navigator>
+          )
+        }
+
+      </NavigationContainer>
+      <ToastManager />
+
     </>
   );
 }

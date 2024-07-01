@@ -10,10 +10,7 @@ import categoryImg05 from "../../Assets/woman1.png";
 import categoryImg06 from "../../Assets/bed1.png";
 import NewPost from "../components/NewPost";
 import IonIcon from "react-native-vector-icons/Ionicons";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { Toast } from "toastify-react-native";
-import { clearErrors, getAllProperty } from "../redux/action/propertyAction";
+
 
 
 const Home = ({ navigation }) => {

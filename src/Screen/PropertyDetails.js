@@ -59,7 +59,17 @@ const PropertyDetails = ({ navigation, route: { params } }) => {
 
 
   }, [_id]);
+  useEffect(() => {
+           
+    if (property.image) {
+      setImage(property.image)
+    } else {
+      setImage(defaultImg)
+    }
+
+  }, [property])
   // console.log(user.user.name);
+
 
   return (
     <View>

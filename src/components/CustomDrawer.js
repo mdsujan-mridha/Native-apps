@@ -9,28 +9,26 @@ import auth from '@react-native-firebase/auth';
 import Services from '../utils/Services';
 import { useNavigation } from '@react-navigation/native';
 import { Toast } from 'toastify-react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
 const CustomDrawer = (props) => {
 
     const navigation = useNavigation();
-    const { userData, setUserData } = useContext(AuthContext);
+    const dispatch = useDispatch();
+    const { user, loading, isAuthenticated } = useSelector((state) => state.user);
+    // console.log(userData);
 
- 
 
-    const logout = () => {
-        auth().signOut()
-            .then(() => {
-                Toast.success("Logout Success");
-                setUserData(null);
-                Services.Logout();
-                navigation.navigate('Login');
-                
-            })
-            .catch(error => {
-                Toast.error("Logout Failed", error);
-            });
+
+    const logout = async() => {
+        try {
+            await AsyncStorage.removeItem('userToken');
+        } catch (e) {
+            console.error('Failed to delete the token from storage', e);
+        }
     }
 
     return (
@@ -43,7 +41,7 @@ const CustomDrawer = (props) => {
                     style={{ padding: 20, marginTop: -10 }}
                 >
                     <Image
-                        source={{ uri: userData?.photo || userData.photoURL }}
+                        source={{ uri: user?.avatar.url }}
                         style={{ height: 80, width: 80, borderRadius: 40, marginTop: 10 }}
                     />
 
@@ -54,7 +52,7 @@ const CustomDrawer = (props) => {
                             fontFamily: 'Roboto-Medium',
                             marginBottom: 5,
                         }}>
-                        {userData?.name || userData.displayName}
+                        {user?.name}
                     </Text>
                     <Text
                         style={{
@@ -63,7 +61,7 @@ const CustomDrawer = (props) => {
                             fontFamily: 'Roboto-Medium',
                             marginBottom: 5,
                         }}>
-                        {userData?.email}
+                        {user?.email}
                     </Text>
 
                 </ImageBackground>

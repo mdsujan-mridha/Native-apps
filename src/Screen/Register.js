@@ -1,12 +1,13 @@
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import registrationImg from "../../Assets/registration.png";
 import { colors, defaultImg, defaultStyle } from '../utils/styles';
 import { Button, PaperProvider } from 'react-native-paper';
 import { Toast } from 'toastify-react-native';
 import IonIcon from "react-native-vector-icons/Ionicons";
-import auth from '@react-native-firebase/auth';
-import Entypo from 'react-native-vector-icons/Entypo'
+
+
+import Entypo from 'react-native-vector-icons/Entypo';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearErrors, registerUser } from '../redux/action/userAction';
@@ -20,62 +21,53 @@ const Register = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState("");
-    const [location, setLocation] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [location, setLocation] = useState('');
     const [imageUrl, setImageUrl] = useState(defaultImg);
-    // function for open camera 
+    
+    // Function to open camera
     const openCameraLib = async () => {
-
         const result = await launchCamera();
         setImageUrl(result.assets[0]?.uri);
-    }
-    //  open image galley
+    };
+
+    // Function to open image gallery
     const openGalleryLib = async () => {
         const result = await launchImageLibrary();
         setImageUrl(result.assets[0]?.uri);
-    }
+    };
 
     const submitHandler = async () => {
-        if (email == "" || password == "" || name == "" || phoneNumber == "" || location == "") {
-            Toast.error("Please fill in input field");
+        if (!email || !password || !name || !phoneNumber || !location) {
+            Toast.error("Please fill in all input fields");
             return;
         }
-        auth().createUserWithEmailAndPassword(email, password)
-            .then((userCredential) => {
-                userCredential.user.updateProfile({
-                    displayName: name,
-                    phoneNumber: phoneNumber,
-                    photoURL: imageUrl
-                });
-
-                const myForm = {
-                    name: name,
-                    email: email,
-                    phoneNumber: phoneNumber,
-                    location: location,
-                    _id: userCredential.user.uid
-                }
-                // console.log(myForm);
-                dispatch(registerUser(myForm));
-            })
-            .catch(err => {
-                console.log(err)
-                Toast.error(err.message);
-            })
+        const formData = new FormData();
+        if (imageUrl) {
+            formData.append('file', {
+                name: 'profile_image.png',
+                type: 'image/png',
+                uri: imageUrl,
+            });
+        }
+        formData.append('name', name);
+        formData.append('email', email);
+        formData.append('password', password);
+        formData.append('phoneNumber', phoneNumber);
+        formData.append('location', location);
+        dispatch(registerUser(formData));
     };
 
     useEffect(() => {
-
         if (error) {
             Toast.error(error);
             dispatch(clearErrors());
         }
-        if (isAuthenticated === true) {
-            Toast.success("Registration Successfully");
-            navigation.navigate('Login')
+        if (isAuthenticated) {
+            Toast.success("Registration Successful");
+            // navigation.navigate('Login');
         }
-
-    }, [error, isAuthenticated, dispatch])
+    }, [error, isAuthenticated, dispatch]);
 
     return (
         <PaperProvider>
@@ -84,16 +76,13 @@ const Register = () => {
                     <Image source={registrationImg} style={{ width: "100%", height: 300 }} />
                     <View style={{ ...styles.profileContainer, marginTop: 10 }}>
                         <View>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: colors.color3, paddingTop: 10, textAlign: 'center' }}> Create New Account! </Text>
+                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: colors.color3, paddingTop: 10, textAlign: 'center' }}>
+                                Create New Account!
+                            </Text>
                         </View>
                         <View style={styles.imgContainer}>
-                            <Image
-                                source={{ uri: imageUrl }}
-                                style={styles.image} />
-                            <TouchableOpacity
-                                style={{ alignItems: "flex-end", top: -20 }}
-                                onPress={openCameraLib}
-                            >
+                            <Image source={{ uri: imageUrl }} style={styles.image} />
+                            <TouchableOpacity style={{ alignItems: "flex-end", top: -20 }} onPress={openCameraLib}>
                                 <Entypo name="pencil" size={24} color={colors.color8} />
                             </TouchableOpacity>
                         </View>
@@ -105,11 +94,18 @@ const Register = () => {
                         </View>
                         <View style={styles.contentView}>
                             <IonIcon name="call-outline" size={30} color={colors.color3} style={styles.iconStyle} />
-                            <TextInput placeholder="PhoneNumber" placeholderTextColor={colors.color3} style={{ ...defaultStyle.inputStyle, width: "100%", paddingLeft: 40 }} value={phoneNumber} onChangeText={setPhoneNumber} />
+                            <TextInput
+                                placeholder="PhoneNumber"
+                                placeholderTextColor={colors.color3}
+                                style={{ ...defaultStyle.inputStyle, width: "100%", paddingLeft: 40 }}
+                                value={phoneNumber}
+                                keyboardType='numeric'
+                                onChangeText={setPhoneNumber}
+                            />
                         </View>
                         <View style={styles.contentView}>
                             <IonIcon name="location-outline" size={30} color={colors.color3} style={styles.iconStyle} />
-                            <TextInput placeholder="location" placeholderTextColor={colors.color3} style={{ ...defaultStyle.inputStyle, width: "100%", paddingLeft: 40 }} value={location} onChangeText={setLocation} />
+                            <TextInput placeholder="Location" placeholderTextColor={colors.color3} style={{ ...defaultStyle.inputStyle, width: "100%", paddingLeft: 40 }} value={location} onChangeText={setLocation} />
                         </View>
                         <View style={styles.contentView}>
                             <IonIcon name="mail-outline" size={30} color={colors.color3} style={styles.iconStyle} />
@@ -117,17 +113,19 @@ const Register = () => {
                         </View>
                         <View style={styles.contentView}>
                             <IonIcon name="lock-closed-outline" size={30} color={colors.color3} style={styles.iconStyle} />
-                            <TextInput placeholder="Password" placeholderTextColor={colors.color3} style={{ ...defaultStyle.inputStyle, width: "100%", paddingLeft: 40 }} value={password} onChangeText={setPassword} />
+                            <TextInput placeholder="Password" placeholderTextColor={colors.color3} style={{ ...defaultStyle.inputStyle, width: "100%", paddingLeft: 40 }} value={password} onChangeText={setPassword} secureTextEntry />
                         </View>
-                        <Button style={styles.btn} onPress={submitHandler}> <Text style={{ color: colors.color3, fontSize: 11 }} > sign up </Text> </Button>
+                        <Button style={styles.btn} onPress={submitHandler}>
+                            <Text style={{ color: colors.color3, fontSize: 11 }}>Sign Up</Text>
+                        </Button>
                     </View>
                 </View>
             </SafeAreaView>
         </PaperProvider>
-    )
-}
+    );
+};
 
-export default Register
+export default Register;
 
 const styles = StyleSheet.create({
     container: {
@@ -163,7 +161,6 @@ const styles = StyleSheet.create({
         marginTop: 5,
         borderRadius: 100,
     },
-
     imgContainer: {},
     textContainer: {
         alignItems: 'center',
@@ -175,4 +172,4 @@ const styles = StyleSheet.create({
         borderColor: colors.color4,
         borderWidth: 3,
     },
-})
+});
