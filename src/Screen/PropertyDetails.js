@@ -12,14 +12,10 @@ const PropertyDetails = ({ navigation, route: { params } }) => {
   const dispatch = useDispatch();
   const { property, error, success } = useSelector((state) => state.propertyDetails);
   // const { user, error: userError, loading: userLoading } = useSelector((state) => state.userDetails);
-  const [user, setUser] = useState({});
   const [image, setImage] = useState(defaultImg);
-
   // console.log(params.id);
   const id = params?.id
   // user id for load user info 
-  const _id = property.user
-
   useEffect(() => {
 
     if (error) {
@@ -33,8 +29,6 @@ const PropertyDetails = ({ navigation, route: { params } }) => {
 
   }, [dispatch, error, success, id])
 
-  // console.log(property);
-  // console.log(property.image);
   // const handle linking 
   const handleLocationClick = () => {
 
@@ -51,14 +45,7 @@ const PropertyDetails = ({ navigation, route: { params } }) => {
   }
 
   // console.log(property.image);
-  useEffect(() => {
 
-    fetch(`https://rental-property-mobile-apps.vercel.app/api/v1/user/${_id}`)
-      .then(res => res.json())
-      .then(data => setUser(data))
-
-
-  }, [_id]);
   useEffect(() => {
            
     if (property.image) {
@@ -69,7 +56,7 @@ const PropertyDetails = ({ navigation, route: { params } }) => {
 
   }, [property])
   // console.log(user.user.name);
-
+  
 
   return (
     <View>
@@ -195,8 +182,8 @@ const PropertyDetails = ({ navigation, route: { params } }) => {
               <View style={{ ...defaultStyle.rowView, height: 120, backgroundColor: colors.color7, borderRadius: 9, borderWidth: 1, borderColor: 'gray', gap: 20 }}>
                 <IonIcon name="person-outline" size={50} color={colors.color1} style={{ paddingLeft: 10 }} />
                 <View>
-                  <Text style={{ color: colors.color1 }}> {user?.user?.name} </Text>
-                  <Text style={{ color: colors.color1 }}> {user?.user?.phoneNumber} </Text>
+                  <Text style={{ color: colors.color1 }}> Sujan </Text>
+                  <Text style={{ color: colors.color1 }}> 01615951638 </Text>
                 </View>
               </View>
             </View>

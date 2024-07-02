@@ -17,7 +17,7 @@ import Loader from './Loader';
 const NewPost = () => {
     const dispatch = useDispatch();
     const { properties, loading, error } = useSelector((state) => state.properties);
-    const newProperty = properties.slice(3, 6);
+    const newProperty = properties?.slice(3, 6);
     // console.log(newProperty);
 
     useEffect(() => {

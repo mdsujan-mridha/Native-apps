@@ -9,7 +9,6 @@ import { Caption, Title } from 'react-native-paper';
 import IonIcon from "react-native-vector-icons/Ionicons";
 
 import { useDispatch, useSelector } from 'react-redux';
-import { loadUser } from '../redux/action/userAction';
 import Loader from '../components/Loader';
 
 
@@ -33,7 +32,8 @@ const Profile = ({ navigation }) => {
       setProfileImage(user.avatar.url);
     }
   }, [user])
-  console.log(profileImage);
+  // console.log(profileImage);
+
   return (
     <>
       {

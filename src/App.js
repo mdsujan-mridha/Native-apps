@@ -22,6 +22,7 @@ import LandLordForm from './Screen/LandLordForm';
 import Wishlist from './Screen/Wishlist';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadUser } from './redux/action/userAction';
+import Messages from './Screen/Messages';
 
 
 
@@ -54,6 +55,7 @@ function App() {
                 <Stack.Screen name='freepost' component={FreePost} options={{ headerShadowVisible: false }} />
                 <Stack.Screen name='Landlord' component={LandLordForm} options={{ headerShown: false }} />
                 <Stack.Screen name='Wishlist' component={Wishlist} options={{ headerShown: false }} />
+                <Stack.Screen name='Message' component={Messages} options={{ headerShown: false }} />
               </Stack.Navigator>
 
               <Footer />
