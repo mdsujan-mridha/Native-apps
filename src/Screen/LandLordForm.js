@@ -18,6 +18,7 @@ import { clearErrors, createProperty } from '../redux/action/propertyAction'
 import { Toast } from 'toastify-react-native'
 import { NEW_PROPERTY_RESET } from '../redux/constant/propertyConstant'
 import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const deviceWidth = Dimensions.get("window").width;
 const deviceHeight =
@@ -29,8 +30,9 @@ const deviceHeight =
 
 
 const LandLordForm = ({ navigation }) => {
-    const { userData, setUserData } = useContext(AuthContext);
     const dispatch = useDispatch();
+    const { user, loading, isAuthenticated } = useSelector((state) => state.user);
+
     const { error, success } = useSelector((state) => state.newProperty)
     const [title, setTitle] = useState("আগামি ১লা জুন থেকে ২ রুমে ফ্লাট বাসা ভাড়া দেওয়া  হইবে")
     const [phoneNumber, setPhoneNumber] = useState("01788888888");
@@ -57,7 +59,8 @@ const LandLordForm = ({ navigation }) => {
     const [isChecked, setIsChecked] = useState(false);
     const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
 
-    // console.log(imageUrl);
+    //  user token 
+
 
     // function for handle terms and condition 
     const handleCheckboxChange = () => {
@@ -133,47 +136,54 @@ const LandLordForm = ({ navigation }) => {
         setIsSubmitDisabled(!isValid);
     }, [phoneNumber, rentPrice, flatSize, location, imageUrl, isChecked]);
 
-    const handleSubmit = async () => {
-        const requestData = {
-            title,
-            rentPrice,
-            location,
-            bedRoom,
-            washRoom,
-            barandha,
-            category,
-            phoneNumber,
-            image: imageUrl,
-            flatSize,
-            date,
-            looking,
-            gasBill,
-            electricityBill,
-            waterBill,
-            serviceCharge,
-            others: selectedItems,
-            florNo,
-            user: userData.uid,
-        };
+    const handleSubmit = async (imageUrl) => {
+        const token = await AsyncStorage.getItem('userToken');
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('rentPrice', rentPrice);
+        formData.append('location', location);
+        formData.append('bedRoom', bedRoom);
+        formData.append('washRoom', washRoom);
+        formData.append('barandha', barandha);
+        formData.append('category', category);
+        formData.append('phoneNumber', phoneNumber); // Note: You don't need to convert this into a file as it is already a URL
+        formData.append('flatSize', flatSize);
+        formData.append('date', date);
+        formData.append('looking', looking);
+        formData.append('gasBill', gasBill);
+        formData.append('electricityBill', electricityBill);
+        formData.append('waterBill', waterBill);
+        formData.append('serviceCharge', serviceCharge);
+        formData.append('others', JSON.stringify(selectedItems)); // If `others` is an array, convert it to a JSON string
+        formData.append('florNo', florNo);
+        formData.append('user', user._id);
+        formData.append('file', {
+            name: imageUrl.split('/').pop(),
+            type: 'image/jpeg', // or the correct MIME type
+            url: imageUrl,
+        })
 
         try {
-            fetch(`https://rental-property-mobile-apps.vercel.app/api/v1/property/new`, {
+            const response = await fetch(`https://rental-property-mobile-apps.vercel.app/api/v1/property/new`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`  // Include your token here
                 },
-                body: JSON.stringify(requestData)
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        toast.success('Property Added Successfully')
-                    }
-                })
+                body: JSON.stringify(formData),
+            });
+            const data = await response.json();
 
+            if (data.success) {
+                Toast.show({
+                    type: 'success',
+                    text1: 'Success',
+                    text2: 'Property Added Successfully'
+                });
+            }
         } catch (error) {
-            console.error(error);
+            console.error('Error submitting property:', error);
         }
     };
 
@@ -195,12 +205,7 @@ const LandLordForm = ({ navigation }) => {
 
     }, [error, success, dispatch])
 
-    // console.log(category);
-    // console.log(selectedItems);
-    // console.log(typeof(selectedItems));
-    // console.log(typeof (looking));
-    // console.log(userData.uid);
-    console.log(imageUrl);
+
 
     return (
         <>
