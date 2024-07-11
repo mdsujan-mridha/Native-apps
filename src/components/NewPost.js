@@ -17,7 +17,7 @@ import Loader from './Loader';
 const NewPost = () => {
     const dispatch = useDispatch();
     const { properties, loading, error } = useSelector((state) => state.properties);
-    const newProperty = properties?.slice(3, 6);
+    const newProperty = properties?.slice(1, 4);
     // console.log(newProperty);
 
     useEffect(() => {
@@ -38,7 +38,7 @@ const NewPost = () => {
                     (<Loader />)
                     :
                     (
-                        <View style={{ marginTop: 10, gap: 5 }}>
+                        <View style={{ marginTop: 10, gap: 5}}>
                             {
                                 newProperty &&
                                 newProperty.map((item) => (
@@ -51,11 +51,11 @@ const NewPost = () => {
                                             borderBottomLeftRadius: 10,
                                             borderBottomRightRadius: 10,
                                             height: 120,
-                                            width: 'auto'
+                                            width: '100%'
                                         }}
                                         showsHorizontalScrollIndicator={false}
                                     >
-                                        <Image source={{ uri: item?.image }} style={{ width: 150, height: 100, borderRadius: 10 }} />
+                                        <Image source={{ uri: item?.images[0]?.url }} style={{ width: 150, height: 100, borderRadius: 10 }} />
                                         <View>
                                             <Title style={{ fontSize: 11 }}> {item?.title} </Title>
                                             <View style={{ display: "flex", alignItems: "center", gap: 5, flexDirection: "row" }}>

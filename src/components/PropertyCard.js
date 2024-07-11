@@ -22,7 +22,7 @@ const PropertyCard = ({ navigate, item, id }) => {
         >
             <View style={styles.card}>
                 <View style={styles.imageContainer}>
-                    <Image source={{ uri: item?.image }} style={styles.img} />
+                    <Image source={{ uri: item?.images[0].url }} style={styles.img} />
                     <TouchableOpacity style={styles.wishlistButton} onPress={handleAddToWishlist}>
                         <IonIcon name="heart-outline" size={25} color={colors.color3} />
                     </TouchableOpacity>

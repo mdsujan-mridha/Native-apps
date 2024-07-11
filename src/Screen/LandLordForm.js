@@ -12,13 +12,14 @@ import Modal from "react-native-modal";
 import { Dimensions } from 'react-native';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import mime from "mime";
-import { AuthContext } from '../utils/AuthContext'
+
 import { useDispatch, useSelector } from 'react-redux'
 import { clearErrors, createProperty } from '../redux/action/propertyAction'
 import { Toast } from 'toastify-react-native'
 import { NEW_PROPERTY_RESET } from '../redux/constant/propertyConstant'
-import axios from 'axios'
+
 import AsyncStorage from '@react-native-async-storage/async-storage'
+
 
 const deviceWidth = Dimensions.get("window").width;
 const deviceHeight =
@@ -136,7 +137,7 @@ const LandLordForm = ({ navigation }) => {
         setIsSubmitDisabled(!isValid);
     }, [phoneNumber, rentPrice, flatSize, location, imageUrl, isChecked]);
 
-    const handleSubmit = async (imageUrl) => {
+    const handleSubmit = async () => {
         const token = await AsyncStorage.getItem('userToken');
         const formData = new FormData();
         formData.append('title', title);
@@ -146,49 +147,58 @@ const LandLordForm = ({ navigation }) => {
         formData.append('washRoom', washRoom);
         formData.append('barandha', barandha);
         formData.append('category', category);
-        formData.append('phoneNumber', phoneNumber); // Note: You don't need to convert this into a file as it is already a URL
+        formData.append('phoneNumber', phoneNumber);
         formData.append('flatSize', flatSize);
-        formData.append('date', date);
+        formData.append('date', date.toISOString()); // Convert date to ISO string
         formData.append('looking', looking);
         formData.append('gasBill', gasBill);
         formData.append('electricityBill', electricityBill);
         formData.append('waterBill', waterBill);
         formData.append('serviceCharge', serviceCharge);
-        formData.append('others', JSON.stringify(selectedItems)); // If `others` is an array, convert it to a JSON string
+        formData.append('others', JSON.stringify(selectedItems)); // Convert array to JSON string
         formData.append('florNo', florNo);
-        formData.append('user', user._id);
+        formData.append('user', user?._id);
         formData.append('file', {
-            name: imageUrl.split('/').pop(),
-            type: 'image/jpeg', // or the correct MIME type
-            url: imageUrl,
-        })
+            name: 'profile_image.png',
+            type: mime.getType(imageUrl),
+            uri: imageUrl,
+        });
 
         try {
-            const response = await fetch(`https://rental-property-mobile-apps.vercel.app/api/v1/property/new`, {
+            const response = await fetch(`http://192.168.31.41:5000/api/v1/property/new`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
-                    'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`  // Include your token here
                 },
-                body: JSON.stringify(formData),
+                body: formData,
             });
-            const data = await response.json();
 
-            if (data.success) {
-                Toast.show({
-                    type: 'success',
-                    text1: 'Success',
-                    text2: 'Property Added Successfully'
-                });
-            }
+            // Log response status
+            console.log('Response status:', response.status);
+
+            // Parse response as JSON
+            const responseData = await response.json();
+
+            // Log response data
+            console.log('Response data:', responseData);
+
+            if (response.status === 201 && responseData.success) {
+                Toast.success('Property Added Successfully');
+            } else {
+                // Handle error responses
+                console.error('Error:', responseData.message || 'Failed to add property');
+                Toast.error('Failed to add property')}
         } catch (error) {
-            console.error('Error submitting property:', error);
+            // console.error('Error submitting property:', error);
+            Toast.error('An error occurred while submitting the property');
         }
     };
 
 
 
+
+    // console.log("From form", user);
 
 
     useEffect(() => {

@@ -11,6 +11,7 @@ import {
     PROPERTY_DETAILS_REQUEST,
     PROPERTY_DETAILS_SUCCESS,
 } from "../constant/propertyConstant"
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // get Property 
 export const getAllProperty = (category, price = [5000, 5000], keyword) => async (dispatch) => {
@@ -64,9 +65,14 @@ export const createProperty = (propertyData) => async (dispatch) => {
 export const getPropertyDetails = (id) => async (dispatch) => {
 
     try {
-        dispatch({ type: PROPERTY_DETAILS_REQUEST })
-
-        const { data } = await axios.get(`https://rental-property-mobile-apps.vercel.app/api/v1/property/${id}`);
+        dispatch({ type: PROPERTY_DETAILS_REQUEST });
+        const token = await AsyncStorage.getItem('userToken');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        };
+        const { data } = await axios.get(`http://192.168.31.41:5000/api/v1/property/${id}`, config);
         dispatch({
             type: PROPERTY_DETAILS_SUCCESS,
             payload: data.property,

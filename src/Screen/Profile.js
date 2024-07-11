@@ -27,12 +27,13 @@ const Profile = ({ navigation }) => {
   }, [dispatch])
 
   useEffect(() => {
-    if (user && user.avatar && user.avatar.url) {
+    if (user && user?.avatar && user?.avatar?.url) {
       // console.log('User Avatar URL:', user.avatar.url);
       setProfileImage(user.avatar.url);
     }
   }, [user])
   // console.log(profileImage);
+  // console.log(user);
 
   return (
     <>

@@ -1,62 +1,74 @@
-import { Image, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react';
+import { Image, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View, Pressable } from 'react-native';
 import AppHeader from '../components/AppHeader';
 import { colors, defaultImg, defaultStyle } from '../utils/styles';
 import IonIcon from "react-native-vector-icons/Ionicons";
 import { useDispatch, useSelector } from 'react-redux';
 import { Toast } from 'toastify-react-native';
 import { clearErrors, getPropertyDetails } from '../redux/action/propertyAction';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Carousel from 'react-native-reanimated-carousel';
+import Modal from 'react-native-modal';
 
 const PropertyDetails = ({ navigation, route: { params } }) => {
   const dispatch = useDispatch();
   const { property, error, success } = useSelector((state) => state.propertyDetails);
-  // const { user, error: userError, loading: userLoading } = useSelector((state) => state.userDetails);
-  const [image, setImage] = useState(defaultImg);
-  // console.log(params.id);
-  const id = params?.id
-  // user id for load user info 
-  useEffect(() => {
+  const [user, setUser] = useState(null);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
+  const id = params?.id;
+  const userId = property?.user;
+
+  useEffect(() => {
     if (error) {
       Toast.error(error);
-      dispatch(clearErrors())
+      dispatch(clearErrors());
     }
     if (success) {
       Toast.success("Property Details");
     }
-    dispatch(getPropertyDetails(id))
-
-  }, [dispatch, error, success, id])
-
-  // const handle linking 
-  const handleLocationClick = () => {
-
-    const googleLocation = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property?.location)}`
-
-    Linking.openURL(googleLocation);
-
-  };
-
-  // handle phone number
-  const handlePhoneClick = () => {
-    const phone = `tel:${property.phone}`
-    Linking.openURL(phone);
-  }
-
-  // console.log(property.image);
+    dispatch(getPropertyDetails(id));
+  }, [dispatch, error, success, id]);
 
   useEffect(() => {
-           
-    if (property.image) {
-      setImage(property.image)
-    } else {
-      setImage(defaultImg)
-    }
+    const fetchUserData = async () => {
+      if (userId) {
+        try {
+          const token = await AsyncStorage.getItem('userToken');
+          const response = await fetch(`http://192.168.31.41:5000/api/v1/user/${userId}`, {
+            headers: {
+              Accept: 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          const data = await response.json();
+          setUser(data.user);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+    };
 
-  }, [property])
-  // console.log(user.user.name);
-  
+    fetchUserData();
+  }, [userId]);
+
+  const images = property.images?.map(img => img.url) || [defaultImg];
+
+  const handleImageClick = (image) => {
+    setSelectedImage(image);
+    setModalVisible(true);
+  };
+
+  const handleLocationClick = () => {
+    const googleLocation = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(property?.location)}`;
+    Linking.openURL(googleLocation);
+  };
+
+  const handlePhoneClick = () => {
+    const phone = `tel:${property.phone}`;
+    Linking.openURL(phone);
+  };
 
   return (
     <View>
@@ -71,10 +83,18 @@ const PropertyDetails = ({ navigation, route: { params } }) => {
       />
       <ScrollView style={{ marginBottom: 20, marginTop: 10 }}>
         <View style={styles.container}>
-          <Image
-            source={{ uri: image }}
-            style={styles.propertyImage}
-            resizeMode="cover"
+          <Carousel
+            loop
+            width={350}
+            height={300}
+            autoPlay={true}
+            data={images}
+            scrollAnimationDuration={1000}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => handleImageClick(item)}>
+                <Image source={{ uri: item }} style={styles.propertyImage} />
+              </TouchableOpacity>
+            )}
           />
 
           <View style={styles.content}>
@@ -140,7 +160,6 @@ const PropertyDetails = ({ navigation, route: { params } }) => {
                 paddingTop: 20,
                 gap: 10,
                 marginBottom: 20,
-
               }}
               showsHorizontalScrollIndicator={false}
             >
@@ -181,10 +200,14 @@ const PropertyDetails = ({ navigation, route: { params } }) => {
               <Text> বিজ্ঞাপণ দাতা </Text>
               <View style={{ ...defaultStyle.rowView, height: 120, backgroundColor: colors.color7, borderRadius: 9, borderWidth: 1, borderColor: 'gray', gap: 20 }}>
                 <IonIcon name="person-outline" size={50} color={colors.color1} style={{ paddingLeft: 10 }} />
-                <View>
-                  <Text style={{ color: colors.color1 }}> Sujan </Text>
-                  <Text style={{ color: colors.color1 }}> 01615951638 </Text>
-                </View>
+                {user ? (
+                  <View>
+                    <Text style={{ color: colors.color1 }}> {user.name} </Text>
+                    <Text style={{ color: colors.color1 }}> {property?.phoneNumber} </Text>
+                  </View>
+                ) : (
+                  <Text>Loading...</Text>
+                )}
               </View>
             </View>
             <View>
@@ -204,17 +227,27 @@ const PropertyDetails = ({ navigation, route: { params } }) => {
             </View>
           </View>
         </View>
-      </ScrollView >
-    </View >
-  )
-}
 
-export default PropertyDetails
+        <Modal isVisible={isModalVisible} onBackdropPress={() => setModalVisible(false)}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Image source={{ uri: selectedImage }} style={styles.fullScreenImage} />
+            <Pressable onPress={() => setModalVisible(false)} style={styles.closeButton}>
+              <Text style={styles.closeButtonText}>Close</Text>
+            </Pressable>
+          </View>
+        </Modal>
+      </ScrollView>
+    </View>
+  );
+};
+
+export default PropertyDetails;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 20,
   },
   content: {
@@ -222,8 +255,7 @@ const styles = StyleSheet.create({
     width: '90%',
     display: 'flex',
     gap: 10,
-    marginBottom: 20
-
+    marginBottom: 20,
   },
   details: {
     marginTop: 10,
@@ -236,7 +268,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10
+    gap: 10,
   },
   otherServiceDetails: {
     width: 130,
@@ -245,12 +277,10 @@ const styles = StyleSheet.create({
     borderRadius: 9,
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
-
   propertyImage: {
-
-    width: "90%",
+    width: '90%',
     height: 300,
     resizeMode: 'contain',
     backgroundColor: colors.color7,
@@ -259,8 +289,22 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
-
-  }
-
+    alignItems: 'center',
+  },
+  fullScreenImage: {
+    width: '100%',
+    height: '80%',
+    resizeMode: 'contain',
+  },
+  closeButton: {
+    position: 'absolute',
+    bottom: 20,
+    backgroundColor: colors.color1,
+    padding: 10,
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
 });
