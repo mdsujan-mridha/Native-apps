@@ -1,4 +1,5 @@
 import axios from "axios";
+
 import {
     ALL_PROPERTY_FAIL,
     ALL_PROPERTY_REQUEST,
@@ -46,7 +47,7 @@ export const createProperty = (propertyData) => async (dispatch) => {
 
         dispatch({ type: NEW_PROPERTY_REQUEST })
 
-        const data = await axios.post(`https://rental-property-mobile-apps.vercel.app/api/v1/property/new`, propertyData);
+        const data = await axios.post('https://rental-property-mobile-apps.vercel.app/api/v1/property/new', propertyData);
         dispatch({
             type: NEW_PROPERTY_SUCCESS,
             payload: data,
@@ -72,7 +73,7 @@ export const getPropertyDetails = (id) => async (dispatch) => {
                 Authorization: `Bearer ${token}`,
             },
         };
-        const { data } = await axios.get(`http://192.168.31.41:5000/api/v1/property/${id}`, config);
+        const { data } = await axios.get(`https://rental-property-mobile-apps.vercel.app/api/v1/property/${id}`, config);
         dispatch({
             type: PROPERTY_DETAILS_SUCCESS,
             payload: data.property,

@@ -62,7 +62,7 @@ const Login = () => {
                     <View>
                         <TextInput placeholder="Password" placeholderTextColor={colors.color3} style={defaultStyle.inputStyle} value={password} onChangeText={setPassword} />
                     </View>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>
                         <Text style={{ color: colors.color3, textAlign: 'right', fontSize: 12 }}> Forgot your password? </Text>
                     </TouchableOpacity>
                     <Button style={styles.btn} onPress={submitHandler}> <Text style={{ color: colors.color3, fontSize: 11 }}> Login </Text> </Button>

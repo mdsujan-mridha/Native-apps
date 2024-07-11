@@ -15,8 +15,6 @@ import IonIcon from "react-native-vector-icons/Ionicons";
 
 const Home = ({ navigation }) => {
 
-
-
     const categories = [
         {
             _id: 1,

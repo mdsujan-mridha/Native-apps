@@ -23,6 +23,8 @@ import Wishlist from './Screen/Wishlist';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadUser } from './redux/action/userAction';
 import Messages from './Screen/Messages';
+import ForgotPassword from './Screen/ForgotPassword';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -31,13 +33,15 @@ const Stack = createNativeStackNavigator();
 function App() {
   const dispatch = useDispatch();
   const { isAuthenticated, user } = useSelector((state) => state.user);
+  // console.log(user);
+
 
 
   useEffect(() => {
+    dispatch(loadUser());
 
-    dispatch(loadUser())
-
-  }, [dispatch])
+    
+  }, [dispatch]);
 
   // console.log("From app screen", user);
 
@@ -64,6 +68,7 @@ function App() {
             <Stack.Navigator>
               <Stack.Screen name='Login' component={Login} options={{ headerShown: false }} />
               <Stack.Screen name='Register' component={Register} options={{ headerShown: false }} />
+              <Stack.Screen name='ForgotPassword' component={ForgotPassword} options={{ headerShown: false }} />
 
             </Stack.Navigator>
           )

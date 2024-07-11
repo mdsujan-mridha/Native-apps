@@ -165,7 +165,7 @@ const LandLordForm = ({ navigation }) => {
         });
 
         try {
-            const response = await fetch(`http://192.168.31.41:5000/api/v1/property/new`, {
+            const response = await fetch('https://rental-property-mobile-apps.vercel.app/api/v1/property/new', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -188,7 +188,8 @@ const LandLordForm = ({ navigation }) => {
             } else {
                 // Handle error responses
                 console.error('Error:', responseData.message || 'Failed to add property');
-                Toast.error('Failed to add property')}
+                Toast.error('Failed to add property')
+            }
         } catch (error) {
             // console.error('Error submitting property:', error);
             Toast.error('An error occurred while submitting the property');

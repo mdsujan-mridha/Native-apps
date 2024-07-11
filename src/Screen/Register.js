@@ -5,8 +5,6 @@ import { colors, defaultImg, defaultStyle } from '../utils/styles';
 import { Button, PaperProvider } from 'react-native-paper';
 import { Toast } from 'toastify-react-native';
 import IonIcon from "react-native-vector-icons/Ionicons";
-
-
 import Entypo from 'react-native-vector-icons/Entypo';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { useDispatch, useSelector } from 'react-redux';

@@ -14,6 +14,7 @@ const PropertyCard = ({ navigate, item, id }) => {
         dispatch(addToWishlist(item));
         // console.log(result);
     }
+
     return (
         <TouchableOpacity
             activeOpacity={1}
@@ -57,9 +58,13 @@ const PropertyCard = ({ navigate, item, id }) => {
                         <Text style={styles.textUtils}> ভাড়া: $ {item?.rentPrice} </Text>
                     </View>
                     <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
-                        <TouchableOpacity style={{ backgroundColor: colors.color1, width: 150, height: 40, borderRadius: 50, justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={{ color: colors.color5, fontSize: 15 }} onPress={() => navigate.navigate('Message', { propertyId: id, landlordId: item?.ownerId })}> send Message </Text>
+                        <TouchableOpacity
+                            style={{ backgroundColor: colors.color1, width: 150, height: 40, borderRadius: 50, justifyContent: 'center', alignItems: 'center' }}
+                            onPress={() => navigate.navigate('Message', { propertyId: id, landlordId: item?.user })}
+                        >
+                            <Text style={{ color: colors.color5, fontSize: 15 }}> send Message </Text>
                         </TouchableOpacity>
+
                         <TouchableOpacity style={{ backgroundColor: colors.color1, width: 160, height: 40, borderRadius: 50, justifyContent: 'center', alignItems: 'center' }} onPress={() => navigate.navigate('propertyDetails', { id })}>
                             <Text style={{ color: colors.color5, fontSize: 15 }}>View Details</Text>
                         </TouchableOpacity>

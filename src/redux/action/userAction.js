@@ -1,4 +1,5 @@
 import axios from "axios"
+
 import {
     CLEAR_ERRORS,
     LOAD_USER_FAIL,
@@ -24,7 +25,8 @@ export const registerUser = (userData) => async (dispatch) => {
             }
         }
         // console.log("user data on action:", userData);
-        const data = await axios.post(`https://rental-property-mobile-apps.vercel.app/api/v1/user/new`, userData, config);
+        const data = await axios.post('https://rental-property-mobile-apps.vercel.app/api/v1/user/new', userData, config);
+        await AsyncStorage.setItem('userToken', data.data.token);
         dispatch({
             type: REGISTER_USER_SUCCESS,
             payload: data.user
@@ -53,7 +55,7 @@ export const loadUser = () => async (dispatch) => {
             },
         };
 
-        const { data } = await axios.get("https://rental-property-mobile-apps.vercel.app/api/v1/user/me", config);
+        const { data } = await axios.get('https://rental-property-mobile-apps.vercel.app/api/v1/user/me', config);
 
         dispatch({
             type: LOAD_USER_SUCCESS,
@@ -74,9 +76,10 @@ export const login = (email, password) => async (dispatch) => {
 
         dispatch({ type: LOGIN_REQUEST })
 
-        const data = await axios.post(`http://192.168.31.41:5000/api/v1/user/login`, { email, password });
+        const data = await axios.post('http://192.168.31.41:5000/api/v1/user/login', { email, password });
         // console.log(data.data.token);
         await AsyncStorage.setItem('userToken', data.data.token)
+        // console.log(data.data.token);
         dispatch({
             type: LOGIN_SUCCESS,
             payload: data.user

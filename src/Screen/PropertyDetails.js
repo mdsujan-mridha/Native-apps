@@ -36,7 +36,7 @@ const PropertyDetails = ({ navigation, route: { params } }) => {
       if (userId) {
         try {
           const token = await AsyncStorage.getItem('userToken');
-          const response = await fetch(`http://192.168.31.41:5000/api/v1/user/${userId}`, {
+          const response = await fetch(`https://rental-property-mobile-apps.vercel.app/api/v1/user/${userId}`, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${token}`,

@@ -17,7 +17,9 @@ import Loader from './Loader';
 const NewPost = () => {
     const dispatch = useDispatch();
     const { properties, loading, error } = useSelector((state) => state.properties);
-    const newProperty = properties?.slice(1, 4);
+
+    properties.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const newProperty = properties?.slice(3, 7);
     // console.log(newProperty);
 
     useEffect(() => {
@@ -38,7 +40,7 @@ const NewPost = () => {
                     (<Loader />)
                     :
                     (
-                        <View style={{ marginTop: 10, gap: 5}}>
+                        <View style={{ marginTop: 10, gap: 5 }}>
                             {
                                 newProperty &&
                                 newProperty.map((item) => (
