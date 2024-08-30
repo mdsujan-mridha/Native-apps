@@ -12,16 +12,39 @@ This Rental Property Mobile Application is a comprehensive platform built using 
 - **Add Property**: Authenticated user can add their property.
 - **User Dashboard**: Personalized dashboard for users to manage their listings and property inquiries.
 
-## Live Demo
+## Technology
 
-Check out the live demo of the application [here](your-live-demo-link).
+- 1. React Native
+- 2. Firebase Authentication
+- 3. Redux
+- 4. Redux-thunk
+- 5. React Navigation
+- 6. React Native Paper
+- 7. react-native-modal
+- 8. react-native-reanimated
+- 9. react-native-vector-icons
+- 10. toastify-react-native
+- 11. MongoDB
+- 12. Express
+- 13. Node.js
+- 14. Nodemailer
+- 15. React-native-image-picker
+- 16. Multer
+
+
+
 
 ## Screenshots
-
-![Home Page](path-to-your-screenshot)
-![Property Listing](path-to-your-screenshot)
-![Property Details](path-to-your-screenshot)
-![User Dashboard](path-to-your-screenshot)
+![Login](https://github.com/mdsujan-mridha/Native-apps/blob/main/images/login.png)
+![Registration](https://github.com/mdsujan-mridha/Native-apps/blob/main/images/registration-screen.png)
+![Home Page](https://github.com/mdsujan-mridha/Native-apps/blob/main/images/Home.png)
+![Home Page](https://github.com/mdsujan-mridha/Native-apps/blob/main/images/drawer.png)
+![Property Listing](https://github.com/mdsujan-mridha/Native-apps/blob/main/images/property.png)
+![Property Details](https://github.com/mdsujan-mridha/Native-apps/blob/main/images/details.png)
+![Add new Property by user](https://github.com/mdsujan-mridha/Native-apps/blob/main/images/selection.png)
+![Add new Property by user](https://github.com/mdsujan-mridha/Native-apps/blob/main/images/form.png)
+![Wish List](https://github.com/mdsujan-mridha/Native-apps/blob/main/images/wishlist.png)
+![User Dashboard](https://github.com/mdsujan-mridha/Native-apps/blob/main/images/profile.png)
 
 ## Installation
 
@@ -48,6 +71,9 @@ To run this project locally, follow these steps:
    npm run ios
    ```
    3. You can now interact with the app on your emulator or simulator.
+   ## Server
+   [This is server link](https://github.com/mdsujan-mridha/Rental-property-Mobile-Apps.git)
+
    ## Contributing
    Contributions are welcome! If you find any issues or have suggestions for improvements, please feel free to open an issue or submit a pull request.
    ## License
